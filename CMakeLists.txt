@@ -6,6 +6,19 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_EXTENSIONS OFF)
 
 add_library(Rpg
+        # Data
+        include/Rpg/Data/Entities/CharacterBlueprint.h
+        include/Rpg/Data/Entities/EnemyBlueprint.h
+        include/Rpg/Data/Items/ConsumableBlueprint.h
+        include/Rpg/Data/Items/WeaponBlueprint.h
+        include/Rpg/Data/Items/ArmorBlueprint.h
+        include/Rpg/Data/StatusModifierType.h
+        include/Rpg/Data/SystemType.h
+
+        # Concepts
+        include/Rpg/Concepts/AttributeComponent.h
+        include/Rpg/Concepts/ContainerItem.h
+
         # Components
         include/Rpg/Components/IdComponent.h
         include/Rpg/Components/StatusModifierComponent.h
@@ -15,18 +28,6 @@ add_library(Rpg
         include/Rpg/Components/StackComponent.h
         include/Rpg/Components/Containers/ContainerComponent.h
         include/Rpg/Components/Containers/EquipmentComponent.h
-
-        # Concepts
-        include/Rpg/Concepts/AttributeComponent.h
-        include/Rpg/Concepts/ContainerItem.h
-
-        # Data
-        include/Rpg/Data/Entities/CharacterBlueprint.h
-        include/Rpg/Data/Entities/EnemyBlueprint.h
-        include/Rpg/Data/Items/ConsumableBlueprint.h
-        include/Rpg/Data/Items/WeaponBlueprint.h
-        include/Rpg/Data/Items/ArmorBlueprint.h
-        include/Rpg/Data/StatusModifierType.h
 
         # Entities
         include/Rpg/Entities/Character.h
@@ -38,15 +39,20 @@ add_library(Rpg
         include/Rpg/Items/Weapon.h
         include/Rpg/Items/Armor.h
 
-        # Systems
-        include/Rpg/Systems/StatusModifierSystem.h
-        include/Rpg/Systems/CombatSystem.h
-        src/Systems/CombatSystem.cpp
+        # Events
+        include/Rpg/Events/ApplyStatusModifierEvent.h
+        include/Rpg/Events/ApplyDamageEvent.h
+        include/Rpg/Events/EventManager.h
 
         # Factories
         include/Rpg/Factories/IdFactory.h
         include/Rpg/Factories/EntityFactory.h
         include/Rpg/Factories/ItemFactory.h
+
+        # Systems
+        include/Rpg/Systems/StatusModifierSystem.h
+        include/Rpg/Systems/CombatSystem.h
+        src/Systems/CombatSystem.cpp
 )
 
 target_include_directories(Rpg PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/include)

@@ -60,7 +60,7 @@ public:
     clamp();
   }
 
-  void fullHeal()
+  void healFull()
   {
     m_current = m_effective;
   }
