@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Rpg/Data/StatusModifierType.h"
+#include "Rpg/Modifiers/StatusModifierType.h"
 
 #include <algorithm>
 #include <cstdint>

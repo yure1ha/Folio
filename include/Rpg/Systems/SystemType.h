@@ -9,6 +9,7 @@ enum class SystemType : std::uint8_t
 {
   StatusModifier,
   Combat,
+  Inventory,
 };
 
 } // namespace Rpg

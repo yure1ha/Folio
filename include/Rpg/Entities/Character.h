@@ -1,76 +1,63 @@
 #pragma once
 
+#include "Rpg/Entities/Entity.h"
+#include "Rpg/Entities/CharacterBlueprint.h"
+
 #include "Rpg/Components/IdComponent.h"
-#include "Rpg/Data/Entities/CharacterBlueprint.h"
-
-#include "Rpg/Components/Attributes/DefenseComponent.h"
-#include "Rpg/Components/Attributes/HealthComponent.h"
-#include "Rpg/Components/Attributes/StrengthComponent.h"
-
-#include "Rpg/Components/StatusModifierComponent.h"
+#include "Rpg/Components/HealthComponent.h"
+#include "Rpg/Components/StrengthComponent.h"
+#include "Rpg/Components/DefenseComponent.h"
+#include "Rpg/Components/EquipmentComponent.h"
+#include "Rpg/Components/ContainerComponent.h"
 
 #include "Rpg/Items/Consumable.h"
 #include "Rpg/Items/Weapon.h"
 #include "Rpg/Items/Armor.h"
-
-#include "Rpg/Components/Containers/ContainerComponent.h"
-#include "Rpg/Components/Containers/EquipmentComponent.h"
+#include "Rpg/Modifiers/StatusModifier.h"
 
 namespace Rpg
 {
 
-class Character
+class Character : public Entity
 {
 public:
-  using StatusModifiers     = ContainerComponent<StatusModifierComponent>;
+  Character(IdComponent id, const CharacterBlueprint& bp);
+
   using ConsumableInventory = ContainerComponent<Consumable>;
   using WeaponInventory     = ContainerComponent<Weapon>;
   using ArmorInventory      = ContainerComponent<Armor>;
+  using ModifierList        = ContainerComponent<StatusModifier>;
 
-  Character(IdComponent id, const CharacterBlueprint& bp);
-
-  IdComponent id() const { return m_id; }
-
-  HealthComponent& health()     { return m_health; }
-  StrengthComponent& strength() { return m_strength; }
-  DefenseComponent& defense()   { return m_defense; }
-
-  const HealthComponent& health() const     { return m_health; }
-  const StrengthComponent& strength() const { return m_strength; }
-  const DefenseComponent& defense() const   { return m_defense; }
-
-  StatusModifiers& modifiers()             { return m_modifiers; }
-  const StatusModifiers& modifiers() const { return m_modifiers; }
+  HealthComponent& health()       { return m_health; }
+  StrengthComponent& strength()   { return m_strength; }
+  DefenseComponent& defense()     { return m_defense; }
+  EquipmentComponent& equipment() { return m_equipment; }
 
   ConsumableInventory& consumables() { return m_consumables; }
   WeaponInventory& weapons()         { return m_weapons; }
   ArmorInventory& armor()            { return m_armor; }
+  ModifierList& modifiers()          { return m_modifiers; }
+
+  const HealthComponent& health() const       { return m_health; }
+  const StrengthComponent& strength() const   { return m_strength; }
+  const DefenseComponent& defense() const     { return m_defense; }
+  const EquipmentComponent& equipment() const { return m_equipment; }
 
   const ConsumableInventory& consumables() const { return m_consumables; }
   const WeaponInventory& weapons() const         { return m_weapons; }
   const ArmorInventory& armor() const            { return m_armor; }
-
-  void equipWeapon(Weapon weapon);
-  void unequipWeapon();
-  void equipArmor(Armor armor);
-  void unequipArmor();
-
-  void useConsumable(Consumable consumable);
+  const ModifierList& modifiers() const          { return m_modifiers; }
 
 private:
-  IdComponent         m_id;
-
-  HealthComponent     m_health;
-  StrengthComponent   m_strength;
-  DefenseComponent    m_defense;
-
-  StatusModifiers     m_modifiers;
+  HealthComponent    m_health;
+  StrengthComponent  m_strength;
+  DefenseComponent   m_defense;
+  EquipmentComponent m_equipment;
 
   ConsumableInventory m_consumables;
   WeaponInventory     m_weapons;
   ArmorInventory      m_armor;
-
-  EquipmentComponent  m_equipment;
+  ModifierList        m_modifiers;
 };
 
 } // namespace Rpg

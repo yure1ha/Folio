@@ -5,10 +5,9 @@
 namespace Rpg
 {
 
-struct ApplyDamageEvent
+struct UseItemEvent
 {
-  IdComponent sourceId;
-  IdComponent targetId;
+  IdComponent itemId;
 };
 
 } // namespace Rpg

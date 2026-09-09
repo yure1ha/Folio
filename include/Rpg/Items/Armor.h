@@ -1,40 +1,23 @@
 #pragma once
 
-#include "Rpg/Data/Items/ArmorBlueprint.h"
 #include "Rpg/Components/IdComponent.h"
 #include "Rpg/Components/StackComponent.h"
-#include "Rpg/Components/Attributes/DefenseComponent.h"
-#include "Rpg/Components/StatusModifierComponent.h"
+#include "Rpg/Components/DefenseComponent.h"
+#include "Rpg/Modifiers/StatusModifier.h"
 
 #include <cstdint>
-#include <optional>
 
 namespace Rpg
 {
 
-class Armor
+struct Armor
 {
-public:
-  explicit Armor(IdComponent id, const ArmorBlueprint& bp)
-      : m_id       {id},
-        m_stack    {bp.maxStack, bp.currentStack},
-        m_defense  {bp.baseDefense, bp.effectiveDefense},
-        m_modifier {bp.modifier}
-  {
-  }
+  IdComponent id;
+  StackComponent stack;
+  DefenseComponent defense;
+  StatusModifier modifier;
 
-  IdComponent id() const       { return m_id; }
-  std::int32_t sortKey() const { return m_defense.effective(); }
-  StackComponent stack() const { return m_stack; }
-
-  DefenseComponent defense() const   { return m_defense; }
-  OptStatusModifier modifier() const { return m_modifier; }
-
-private:
-  IdComponent       m_id;
-  StackComponent    m_stack;
-  DefenseComponent  m_defense;
-  OptStatusModifier m_modifier;
+  std::int32_t sortKey() const { return defense.effective(); }
 };
 
 } // namespace Rpg

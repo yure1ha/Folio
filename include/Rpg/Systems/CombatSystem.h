@@ -1,16 +1,19 @@
 #pragma once
 
-#include "Rpg/Components/Attributes/StrengthComponent.h"
-#include "Rpg/Components/Attributes/DefenseComponent.h"
-
-#include "Rpg/Entities/Character.h"
-#include "Rpg/Entities/Enemy.h"
+#include "Rpg/Components/StrengthComponent.h"
+#include "Rpg/Components/DefenseComponent.h"
 
 namespace Rpg::CombatSystem
 {
 
-std::int32_t calculateDamage(const StrengthComponent& str, const DefenseComponent& def);
-void applyDamage(const Character& attacker, Enemy& defender);
-void applyDamage(const Enemy& attacker, Character& defender);
+std::int32_t calculateDamage(const StrengthComponent& str,
+                             const DefenseComponent& def);
+
+template <typename T, typename U>
+void applyDamage(const T& source, U& target)
+{
+  const auto amount {calculateDamage(source.strength, target.defense)};
+  target.health.takeDamage(amount);
+}
 
 } // namespace Rpg::CombatSystem

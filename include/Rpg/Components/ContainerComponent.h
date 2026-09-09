@@ -15,7 +15,9 @@ template <Concepts::ContainerItem T>
 class ContainerComponent
 {
 public:
-  explicit ContainerComponent(std::vector<T> items = {})
+  ContainerComponent() = default;
+
+  explicit ContainerComponent(std::vector<T> items)
       : m_items {std::move(items)}
   {
   }
@@ -32,7 +34,7 @@ public:
   {
     return std::ranges::any_of(m_items, [id](const T& comp)
     {
-      return id == comp.id();
+      return id == comp.id;
     });
   }
 
@@ -40,7 +42,7 @@ public:
   {
     return std::ranges::find_if(m_items, [id](const T& comp)
     {
-      return id == comp.id();
+      return id == comp.id;
     });
   }
 
@@ -48,15 +50,15 @@ public:
   {
     return std::ranges::find_if(m_items, [id](const T& comp)
     {
-      return id == comp.id();
+      return id == comp.id;
     });
   }
 
   void add(T item, std::int32_t amount = 1)
   {
-    if (auto it {find(item.id())}; it != end())
+    if (auto it {find(item.id)}; it != end())
     {
-      it->stack().increase(amount);
+      it->stack.increase(amount);
       return;
     }
 
@@ -68,12 +70,12 @@ public:
     auto it {find(id)};
     if (it == end()) return;
 
-    it->stack().decrease(amount);
-    if (it->stack().empty())
+    it->stack.decrease(amount);
+    if (it->stack.empty())
     {
       std::erase_if(m_items, [id](const T& comp)
       {
-        return id == comp.id();
+        return id == comp.id;
       });
     }
   }
@@ -87,7 +89,7 @@ public:
         return a.sortKey() > b.sortKey();
       }
 
-      return a.id() > b.id();
+      return a.id > b.id;
     });
   }
 

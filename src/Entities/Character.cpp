@@ -1,95 +1,24 @@
 #include "Rpg/Entities/Character.h"
 
+#include "Rpg/Entities/Entity.h"
+#include "Rpg/Entities/CharacterBlueprint.h"
+
 #include "Rpg/Components/IdComponent.h"
-#include "Rpg/Data/Entities/CharacterBlueprint.h"
-
-#include "Rpg/Items/Weapon.h"
-#include "Rpg/Items/Armor.h"
-
-#include <optional>
 
 namespace Rpg
 {
 
 Character::Character(IdComponent id, const CharacterBlueprint& bp)
-      : m_id          {id},
-        m_health      {bp.baseHealth, bp.effectiveHealth, bp.currentHealth},
-        m_strength    {bp.baseStrength, bp.effectiveStrength},
-        m_defense     {bp.baseDefense, bp.effectiveDefense},
-        m_modifiers   {bp.modifiers},
-        m_consumables {bp.consumables},
-        m_weapons     {bp.weapons},
-        m_armor       {bp.armor},
-        m_equipment   {bp.equippedWeapon, bp.equippedArmor}
+    : Entity(id),
+      m_health      {bp.baseHealth, bp.effectiveHealth, bp.currentHealth},
+      m_strength    {bp.baseStrength, bp.effectiveStrength},
+      m_defense     {bp.baseDefense, bp.effectiveDefense},
+      m_equipment   {bp.equippedWeapon, bp.equippedArmor},
+      m_consumables {bp.consumables},
+      m_weapons     {bp.weapons},
+      m_armor       {bp.armor},
+      m_modifiers   {bp.modifiers}
 {
-}
-
-void Character::equipWeapon(Weapon weapon)
-{
-  if (!m_weapons.contains(weapon.id())) return;
-
-  unequipWeapon();
-
-  m_weapons.remove(weapon.id());
-  m_equipment.weapon = weapon;
-
-  if (weapon.modifier().has_value())
-  {
-    m_modifiers.add(*weapon.modifier());
-  }
-}
-
-void Character::unequipWeapon()
-{
-  if (!m_equipment.weapon.has_value()) return;
-
-  if (m_equipment.weapon->modifier().has_value())
-  {
-    m_modifiers.remove(m_equipment.weapon->modifier()->id());
-  }
-
-  m_weapons.add(*m_equipment.weapon);
-  m_equipment.weapon.reset();
-}
-
-void Character::equipArmor(Armor armor)
-{
-  if (!m_armor.contains(armor.id())) return;
-
-  unequipArmor();
-
-  m_armor.remove(armor.id());
-  m_equipment.armor = armor;
-
-  if (armor.modifier().has_value())
-  {
-    m_modifiers.add(*armor.modifier());
-  }
-}
-
-void Character::unequipArmor()
-{
-  if (!m_equipment.armor.has_value()) return;
-
-  if (m_equipment.armor->modifier().has_value())
-  {
-    m_modifiers.remove(m_equipment.armor->modifier()->id());
-  }
-
-  m_armor.add(*m_equipment.armor);
-  m_equipment.armor.reset();
-}
-
-void Character::useConsumable(Consumable consumable)
-{
-  if (!m_consumables.contains(consumable.id())) return;
-
-  m_consumables.remove(consumable.id());
-
-  if (consumable.modifier().has_value())
-  {
-    m_modifiers.add(*consumable.modifier());
-  }
 }
 
 } // namespace Rpg

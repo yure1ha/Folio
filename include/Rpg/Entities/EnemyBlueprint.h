@@ -1,10 +1,8 @@
 #pragma once
 
-#include "Rpg/Components/StatusModifierComponent.h"
-
-#include "Rpg/Items/Consumable.h"
 #include "Rpg/Items/Weapon.h"
 #include "Rpg/Items/Armor.h"
+#include "Rpg/Modifiers/StatusModifier.h"
 
 #include <cstdint>
 #include <optional>
@@ -13,17 +11,8 @@
 namespace Rpg
 {
 
-struct CharacterBlueprint
+struct EnemyBlueprint
 {
-  std::vector<StatusModifierComponent> modifiers {};
-
-  std::vector<Consumable> consumables {};
-  std::vector<Weapon> weapons {};
-  std::vector<Armor> armor {};
-
-  std::optional<Weapon> equippedWeapon;
-  std::optional<Armor> equippedArmor;
-
   std::int32_t typeId {};
 
   std::int32_t baseHealth {};
@@ -35,6 +24,11 @@ struct CharacterBlueprint
 
   std::int32_t baseDefense {};
   std::int32_t effectiveDefense {};
+
+  std::optional<Weapon> equippedWeapon {};
+  std::optional<Armor> equippedArmor {};
+
+  std::vector<StatusModifier> modifiers {};
 };
 
 } // namespace Rpg

@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Rpg/Data/SystemType.h"
+#include "Rpg/Systems/SystemType.h"
 
 #include <algorithm>
 #include <cstdint>

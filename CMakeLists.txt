@@ -6,33 +6,32 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_EXTENSIONS OFF)
 
 add_library(Rpg
-        # Data
-        include/Rpg/Data/Entities/CharacterBlueprint.h
-        include/Rpg/Data/Entities/EnemyBlueprint.h
-        include/Rpg/Data/Items/ConsumableBlueprint.h
-        include/Rpg/Data/Items/WeaponBlueprint.h
-        include/Rpg/Data/Items/ArmorBlueprint.h
-        include/Rpg/Data/StatusModifierType.h
-        include/Rpg/Data/SystemType.h
-
         # Concepts
         include/Rpg/Concepts/AttributeComponent.h
         include/Rpg/Concepts/ContainerItem.h
 
         # Components
         include/Rpg/Components/IdComponent.h
-        include/Rpg/Components/StatusModifierComponent.h
-        include/Rpg/Components/Attributes/HealthComponent.h
-        include/Rpg/Components/Attributes/DefenseComponent.h
-        include/Rpg/Components/Attributes/StrengthComponent.h
+        include/Rpg/Components/HealthComponent.h
+        include/Rpg/Components/DefenseComponent.h
+        include/Rpg/Components/StrengthComponent.h
         include/Rpg/Components/StackComponent.h
-        include/Rpg/Components/Containers/ContainerComponent.h
-        include/Rpg/Components/Containers/EquipmentComponent.h
+        include/Rpg/Components/ContainerComponent.h
+        include/Rpg/Components/EquipmentComponent.h
+
+        # Modifiers
+        include/Rpg/Modifiers/StatusModifier.h
+        include/Rpg/Modifiers/StatusModifierType.h
 
         # Entities
+        include/Rpg/Entities/Entity.h
         include/Rpg/Entities/Character.h
-        include/Rpg/Entities/Enemy.h
         src/Entities/Character.cpp
+        include/Rpg/Entities/Enemy.h
+        src/Entities/Enemy.cpp
+        include/Rpg/Entities/CharacterBlueprint.h
+        include/Rpg/Entities/EnemyBlueprint.h
+        include/Rpg/Entities/EntityManager.h
 
         # Items
         include/Rpg/Items/Consumable.h
@@ -43,14 +42,17 @@ add_library(Rpg
         include/Rpg/Events/ApplyStatusModifierEvent.h
         include/Rpg/Events/ApplyDamageEvent.h
         include/Rpg/Events/EventManager.h
+        include/Rpg/Events/UseItemEvent.h
 
         # Factories
         include/Rpg/Factories/IdFactory.h
-        include/Rpg/Factories/EntityFactory.h
-        include/Rpg/Factories/ItemFactory.h
 
         # Systems
+        include/Rpg/Systems/SystemType.h
         include/Rpg/Systems/StatusModifierSystem.h
+        src/Systems/StatusModifierSystem.cpp
+        include/Rpg/Systems/InventorySystem.h
+        src/Systems/InventorySystem.cpp
         include/Rpg/Systems/CombatSystem.h
         src/Systems/CombatSystem.cpp
 )
