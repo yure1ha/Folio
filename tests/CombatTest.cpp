@@ -1,146 +1,157 @@
 #include "Helpers.h"
-
-#include "Rpg/Factories/IdFactory.h"
-
 #include "Rpg/Components/StackComponent.h"
-
-#include "Rpg/Modifiers/StatusModifier.h"
-#include "Rpg/Modifiers/StatusModifierType.h"
-
+#include "Rpg/Entities/Character.h"
+#include "Rpg/Entities/Enemy.h"
+#include "Rpg/Entities/EntityManager.h"
+#include "Rpg/Events/ApplyDamageEvent.h"
+#include "Rpg/Events/ApplyStatusModifierEvent.h"
+#include "Rpg/Events/EventManager.h"
+#include "Rpg/Factories/IdFactory.h"
 #include "Rpg/Items/Armor.h"
 #include "Rpg/Items/Consumable.h"
 #include "Rpg/Items/Weapon.h"
-
-#include "Rpg/Entities/Character.h"
-#include "Rpg/Entities/Enemy.h"
-
+#include "Rpg/Modifiers/StatusModifier.h"
+#include "Rpg/Modifiers/StatusModifierType.h"
 #include "Rpg/Systems/CombatSystem.h"
-#include "Rpg/Systems/StatusModifierSystem.h"
 #include "Rpg/Systems/InventorySystem.h"
+#include "Rpg/Systems/StatusModifierSystem.h"
 
-namespace Rpg::Tests
-{
+#include <memory>
 
-void runCombatTests()
-{
-  IdFactory idFactory;
+namespace Rpg::Tests {
 
-  StatusModifier healthUp {
-    idFactory.allocate(1000),
-    StatusModifierType::Health,
-    StackComponent {99, 1},
-    10
-  };
+void runCombatTests() {
+    IdFactory idFactory;
 
-  StatusModifier healthDown {
-    idFactory.allocate(1001),
-    StatusModifierType::Health,
-    StackComponent {99, 1},
-    -10
-  };
+    StatusModifier healthUp {.id = {.typeId = 1000, .instanceId = idFactory.allocate()},
+                             .type = StatusModifierType::Health,
+                             .stack = {StackComponent {99, 1}},
+                             .value = 10};
 
-  StatusModifier strengthUp {
-    idFactory.allocate(1002),
-    StatusModifierType::Strength,
-    StackComponent {99, 1},
-    10
-  };
+    StatusModifier healthDown {.id = {.typeId = 1001, .instanceId = idFactory.allocate()},
+                               .type = StatusModifierType::Health,
+                               .stack = {StackComponent {99, 1}},
+                               .value = -10};
 
-  StatusModifier strengthDown {
-    idFactory.allocate(1003),
-    StatusModifierType::Strength,
-    StackComponent {99, 1},
-    -10
-  };
+    StatusModifier strengthUp {.id = {.typeId = 1002, .instanceId = idFactory.allocate()},
+                               .type = StatusModifierType::Strength,
+                               .stack = {StackComponent {99, 1}},
+                               .value = 10};
 
-  StatusModifier defenseUp {
-    idFactory.allocate(1004),
-    StatusModifierType::Defense,
-    StackComponent {99, 1},
-    10
-  };
+    StatusModifier strengthDown {.id = {.typeId = 1003, .instanceId = idFactory.allocate()},
+                                 .type = StatusModifierType::Strength,
+                                 .stack = {StackComponent {99, 1}},
+                                 .value = -10};
 
-  StatusModifier defenseDown {
-    idFactory.allocate(1005),
-    StatusModifierType::Defense,
-    StackComponent {99, 1},
-    -10
-  };
+    StatusModifier defenseUp {.id = {.typeId = 1004, .instanceId = idFactory.allocate()},
+                              .type = StatusModifierType::Defense,
+                              .stack = {StackComponent {99, 1}},
+                              .value = 10};
 
-  const Consumable consumable {
-    .id = idFactory.allocate(100),
-    .stack = {99, 10},
-    .modifier = healthUp,
-  };
+    StatusModifier defenseDown {.id = {.typeId = 1005, .instanceId = idFactory.allocate()},
+                                .type = StatusModifierType::Defense,
+                                .stack = {StackComponent {99, 1}},
+                                .value = -10};
 
-  const Weapon weapon {
-    .id = idFactory.allocate(101),
-    .stack = {1, 1},
-    .strength = {5, 5},
-    .modifier = strengthUp,
-  };
+    const Consumable consumable {
+        .id = {.typeId = 100, .instanceId = idFactory.allocate()},
+        .stack = {99, 10},
+        .modifier = healthUp,
+    };
 
-  const Armor armor {
-    .id = idFactory.allocate(102),
-    .stack = {1, 1},
-    .defense = {5, 5},
-    .modifier = defenseUp,
-  };
+    const Weapon weapon {
+        .id = {.typeId = 101, .instanceId = idFactory.allocate()},
+        .stack = {1, 1},
+        .strength = {5, 5},
+        .modifier = strengthUp,
+    };
 
-  Character protagonist {
-    .id = idFactory.allocate(1),
-    .health = {100, 100, 100},
-    .strength = {20, 20},
-    .defense = {20, 20},
-  };
+    const Armor armor {
+        .id = {.typeId = 102, .instanceId = idFactory.allocate()},
+        .stack = {1, 1},
+        .defense = {5, 5},
+        .modifier = defenseUp,
+    };
 
-  Enemy antagonist {
-    .id = idFactory.allocate(2),
-    .health = {100, 100, 100},
-    .strength = {50, 50},
-    .defense = {30, 30},
-  };
+    CharacterBlueprint protagonistBp {
+        .typeId = 1,
 
-  printEntity(protagonist);
-  printEntity(antagonist);
+        .baseHealth = 100,
+        .effectiveHealth = 100,
+        .currentHealth = 100,
 
-  protagonist.weaponInventory.add(weapon);
-  protagonist.armorInventory.add(armor);
-  InventorySystem::equipWeapon(weapon, protagonist.equipment, protagonist.weaponInventory);
-  InventorySystem::equipArmor(armor, protagonist.equipment, protagonist.armorInventory);
-  StatusModifierSystem::addModifier(weapon.modifier, protagonist.modifierList);
-  StatusModifierSystem::addModifier(armor.modifier, protagonist.modifierList);
-  StatusModifierSystem::updateModifiers(protagonist.modifierList, protagonist.strength);
-  StatusModifierSystem::updateModifiers(protagonist.modifierList, protagonist.defense);
-  printEntity(protagonist);
+        .baseStrength = 20,
+        .effectiveStrength = 20,
 
-  CombatSystem::applyDamage(antagonist, protagonist);
-  printEntity(protagonist);
+        .baseDefense = 20,
+        .effectiveDefense = 20,
+    };
 
-  StatusModifierSystem::addModifier(defenseDown, antagonist.modifierList);
-  StatusModifierSystem::updateModifiers(antagonist.modifierList, antagonist.defense);
-  CombatSystem::applyDamage(protagonist, antagonist);
-  printEntity(antagonist);
+    EnemyBlueprint antagonistBp {
+        .typeId = 2,
 
-  CombatSystem::applyDamage(antagonist, protagonist);
-  printEntity(protagonist);
+        .baseHealth = 100,
+        .effectiveHealth = 100,
+        .currentHealth = 100,
 
-  protagonist.health.heal(100);
-  printEntity(protagonist);
+        .baseStrength = 50,
+        .effectiveStrength = 50,
 
-  antagonist.health.takeDamage(100);
-  printEntity(antagonist);
+        .baseDefense = 30,
+        .effectiveDefense = 30,
+    };
 
-  InventorySystem::addItem(consumable, protagonist.consumableInventory);
-  InventorySystem::useConsumable(consumable, protagonist.consumableInventory);
-  StatusModifierSystem::addModifier(consumable.modifier, protagonist.modifierList);
-  StatusModifierSystem::updateModifiers(protagonist.modifierList, protagonist.health);
-  printEntity(protagonist);
+    EntityManager entityManager {idFactory};
 
-  protagonist.health.reset();
-  protagonist.strength.reset();
-  protagonist.defense.reset();
-  printEntity(protagonist);
+    auto protagonistPtr {std::make_unique<Character>(protagonistBp)};
+    Character& protagonist {*protagonistPtr};
+    entityManager.add(std::move(protagonistPtr));
+
+    auto antagonistPtr {std::make_unique<Enemy>(antagonistBp)};
+    Enemy& antagonist {*antagonistPtr};
+    entityManager.add(std::move(antagonistPtr));
+
+    printCombatant(protagonist);
+    printCombatant(antagonist);
+
+    EventManager<ApplyStatusModifierEvent> modifierEventManager;
+    StatusModifierSystem statusModifierSystem {entityManager, modifierEventManager};
+
+    EventManager<ApplyDamageEvent> damageEventManager;
+    CombatSystem combatSystem {entityManager, damageEventManager};
+
+    InventorySystem inventorySystem {entityManager, modifierEventManager};
+
+    inventorySystem.addItem(weapon, protagonist.weapons());
+    inventorySystem.addItem(armor, protagonist.armor());
+    inventorySystem.equipWeapon(weapon, protagonist.id().instanceId);
+    inventorySystem.equipArmor(armor, protagonist.id().instanceId);
+    printCombatant(protagonist);
+
+    combatSystem.applyDamage(antagonist.id().instanceId, protagonist.id().instanceId);
+    printCombatant(protagonist);
+
+    statusModifierSystem.addModifier(defenseDown, antagonist.id().instanceId);
+    combatSystem.applyDamage(protagonist.id().instanceId, antagonist.id().instanceId);
+    printCombatant(antagonist);
+
+    combatSystem.applyDamage(antagonist.id().instanceId, protagonist.id().instanceId);
+    printCombatant(protagonist);
+
+    protagonist.health().heal(100);
+    printCombatant(protagonist);
+
+    antagonist.health().takeDamage(100);
+    printCombatant(antagonist);
+
+    inventorySystem.addItem(consumable, protagonist.consumables());
+    inventorySystem.useConsumable(consumable, protagonist.id().instanceId);
+    printCombatant(protagonist);
+
+    protagonist.health().reset();
+    protagonist.strength().reset();
+    protagonist.defense().reset();
+    printCombatant(protagonist);
 }
 
 } // namespace Rpg::Tests

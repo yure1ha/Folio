@@ -1,16 +1,44 @@
 #include "Rpg/Systems/CombatSystem.h"
 
-#include "Rpg/Components/StrengthComponent.h"
 #include "Rpg/Components/DefenseComponent.h"
+#include "Rpg/Components/IdComponent.h"
+#include "Rpg/Components/StrengthComponent.h"
+#include "Rpg/Entities/Combatant.h"
+#include "Rpg/Entities/EntityManager.h"
+#include "Rpg/Events/ApplyDamageEvent.h"
+#include "Rpg/Events/EventManager.h"
+#include "Rpg/Systems/SystemType.h"
 
 #include <cstdint>
 
-namespace Rpg::CombatSystem
-{
+namespace Rpg {
 
-std::int32_t calculateDamage(const StrengthComponent& str, const DefenseComponent& def)
-{
-  return str.effective() - def.effective();
+CombatSystem::CombatSystem(EntityManager& entityManager, DamageEventManager& damageEventManager)
+    : m_entityManager {entityManager}, m_damageEventManager {damageEventManager} {
+    m_damageEventManager.subscribe(SystemType::Combat, [this](const ApplyDamageEvent& event) {
+        onApplyDamage(event);
+    });
 }
 
-} // namespace Rpg::CombatSystem
+CombatSystem::~CombatSystem() {
+    m_damageEventManager.unsubscribe(SystemType::Combat);
+}
+
+std::int32_t CombatSystem::calculateDamage(const StrengthComponent& str,
+                                           const DefenseComponent& def) {
+    return str.effective() - def.effective();
+}
+
+void CombatSystem::applyDamage(InstanceId sourceId, InstanceId targetId) const {
+    auto source {m_entityManager.find<Combatant>(sourceId)};
+    auto target {m_entityManager.find<Combatant>(targetId)};
+
+    const auto amount {calculateDamage(source->strength(), target->defense())};
+    target->health().takeDamage(amount);
+}
+
+void CombatSystem::onApplyDamage(const ApplyDamageEvent& event) const {
+    applyDamage(event.sourceId, event.targetId);
+}
+
+} // namespace Rpg

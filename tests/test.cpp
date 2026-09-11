@@ -1,13 +1,11 @@
-namespace Rpg::Tests
-{
+namespace Rpg::Tests {
 
 void runCombatTests();
 
 } // namespace Rpg::Tests
 
-int main()
-{
-  Rpg::Tests::runCombatTests();
+int main() {
+    Rpg::Tests::runCombatTests();
 
-  return 0;
+    return 0;
 }

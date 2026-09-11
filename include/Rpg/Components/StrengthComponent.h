@@ -5,56 +5,56 @@
 #include <algorithm>
 #include <cstdint>
 
-namespace Rpg
-{
+namespace Rpg {
 
-class StrengthComponent
-{
-public:
-  StrengthComponent(std::int32_t base, std::int32_t effective)
-      : m_base {base}, m_effective {effective}
-  {
-    clamp();
-  }
+class StrengthComponent {
+  public:
+    explicit StrengthComponent(std::int32_t base) : StrengthComponent {base, base} {}
 
-  static constexpr std::int32_t kMinStrength {1};
-  static constexpr std::int32_t kMaxStrength {99};
-  static constexpr auto         kModifierType {StatusModifierType::Strength};
+    StrengthComponent(std::int32_t base, std::int32_t effective)
+        : m_base {base}, m_effective {effective} {
+        clamp();
+    }
 
-  std::int32_t base() const      { return m_base; }
-  std::int32_t effective() const { return m_effective; }
+    static constexpr std::int32_t kMinStrength {1};
+    static constexpr std::int32_t kMaxStrength {99};
+    static constexpr auto kModifierType {StatusModifierType::Strength};
 
-  void increase(std::int32_t amount)
-  {
-    if (amount <= 0) return;
+    std::int32_t base() const {
+        return m_base;
+    }
 
-    m_effective += amount;
-    clamp();
-  }
+    std::int32_t effective() const {
+        return m_effective;
+    }
 
-  void decrease(std::int32_t amount)
-  {
-    if (amount <= 0) return;
+    void increase(std::int32_t amount) {
+        if (amount <= 0) return;
 
-    m_effective -= amount;
-    clamp();
-  }
+        m_effective += amount;
+        clamp();
+    }
 
-  void reset()
-  {
-    m_effective = m_base;
-    clamp();
-  }
+    void decrease(std::int32_t amount) {
+        if (amount <= 0) return;
 
-private:
-  void clamp()
-  {
-    m_base      = std::clamp(m_base, kMinStrength, kMaxStrength);
-    m_effective = std::clamp(m_effective, kMinStrength, kMaxStrength);
-  }
+        m_effective -= amount;
+        clamp();
+    }
 
-  std::int32_t m_base {};
-  std::int32_t m_effective {};
+    void reset() {
+        m_effective = m_base;
+        clamp();
+    }
+
+  private:
+    void clamp() {
+        m_base = std::clamp(m_base, kMinStrength, kMaxStrength);
+        m_effective = std::clamp(m_effective, kMinStrength, kMaxStrength);
+    }
+
+    std::int32_t m_base {};
+    std::int32_t m_effective {};
 };
 
 } // namespace Rpg

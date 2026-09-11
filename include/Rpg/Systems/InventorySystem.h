@@ -1,44 +1,45 @@
 #pragma once
 
+#include "Rpg/Components/ContainerComponent.h"
+#include "Rpg/Components/IdComponent.h"
 #include "Rpg/Concepts/ContainerItem.h"
+#include "Rpg/Entities/EntityManager.h"
+#include "Rpg/Events/ApplyStatusModifierEvent.h"
 #include "Rpg/Items/Armor.h"
 #include "Rpg/Items/Consumable.h"
 #include "Rpg/Items/Weapon.h"
-#include "Rpg/Components/ContainerComponent.h"
-#include "Rpg/Components/EquipmentComponent.h"
 
-namespace Rpg::InventorySystem
-{
+#include <cstdint>
 
-using ConsumableInventory = ContainerComponent<Consumable>;
-using WeaponInventory     = ContainerComponent<Weapon>;
-using ArmorInventory      = ContainerComponent<Armor>;
+namespace Rpg {
 
-template <Concepts::ContainerItem T>
-void addItem(const T& item, ContainerComponent<T>& inventory)
-{
-  inventory.add(item);
-}
+class InventorySystem {
+  public:
+    using ConsumableInventory = ContainerComponent<Consumable>;
+    using WeaponInventory = ContainerComponent<Weapon>;
+    using ArmorInventory = ContainerComponent<Armor>;
 
-template <Concepts::ContainerItem T>
-void removeItem(const T& item, ContainerComponent<T>& inventory)
-{
-  inventory.remove(item.id);
-}
+    InventorySystem(EntityManager& entityManager, ModifierEventManager& modifierEventManager);
 
-void useConsumable(const Consumable& consumable,
-                   ConsumableInventory& inventory);
+    template <Concepts::ContainerItem T>
+    static void addItem(const T& item, ContainerComponent<T>& inventory) {
+        inventory.add(item);
+    }
 
-void unequipWeapon(EquipmentComponent& equipment,
-                   WeaponInventory& weaponInventory);
+    template <Concepts::ContainerItem T>
+    static void removeItem(const T& item, ContainerComponent<T>& inventory) {
+        inventory.remove(item.id);
+    }
 
-void unequipArmor(EquipmentComponent& equipment,
-                  ArmorInventory& armorInventory);
+    void useConsumable(const Consumable& consumable, InstanceId targetId) const;
+    void unequipWeapon(InstanceId targetId) const;
+    void unequipArmor(InstanceId targetId) const;
+    void equipWeapon(const Weapon& weapon, InstanceId targetId) const;
+    void equipArmor(const Armor& armor, InstanceId targetId) const;
 
-void equipWeapon(const Weapon& weapon, EquipmentComponent& equipment,
-                 WeaponInventory& weaponInventory);
+  private:
+    EntityManager& m_entityManager;
+    ModifierEventManager& m_modifierEventManager;
+};
 
-void equipArmor(const Armor& armor, EquipmentComponent& equipment,
-                ArmorInventory& armorInventory);
-
-} // namespace Rpg::InventorySystem
+} // namespace Rpg

@@ -2,15 +2,13 @@
 
 #include <cstdint>
 
-namespace Rpg
-{
+namespace Rpg {
 
-enum class StatusModifierType : std::uint8_t
-{
-  Health,
-  Strength,
-  Defense,
-  None,
+enum class StatusModifierType : std::uint8_t {
+    Health,
+    Strength,
+    Defense,
+    None,
 };
 
 } // namespace Rpg

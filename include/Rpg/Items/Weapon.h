@@ -7,17 +7,15 @@
 
 #include <cstdint>
 
-namespace Rpg
-{
+namespace Rpg {
 
-struct Weapon
-{
-  IdComponent id;
-  StackComponent stack;
-  StrengthComponent strength;
-  StatusModifier modifier;
+struct Weapon {
+    IdComponent id;
+    StackComponent stack;
+    StrengthComponent strength;
+    StatusModifier modifier;
 
-  std::int32_t sortKey() const { return strength.effective(); }
+    std::int32_t sortKey() const { return strength.effective(); }
 };
 
 } // namespace Rpg

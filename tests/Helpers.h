@@ -1,29 +1,19 @@
 #pragma once
 
-#include "Rpg/Entities/Character.h"
-#include "Rpg/Entities/Enemy.h"
+#include "Rpg/Entities/Combatant.h"
 
 #include <iostream>
 
-namespace Rpg::Tests
-{
+namespace Rpg::Tests {
 
-inline void printEntity(const Character& character)
-{
-  std::cout << "[" << "Protagonist" << "] "
-          << "[ID] "  << character.id.instanceId << "/" << character.id.typeId << " "
-          << "[HP] "  << character.health.current() << "/" << character.health.effective() << "/" << character.health.base() << " "
-          << "[STR] " << character.strength.effective() << "/" << character.strength.base() << " "
-          << "[DEF] " << character.defense.effective() << "/" << character.defense.base() << '\n';
-}
-
-inline void printEntity(const Enemy& enemy)
-{
-  std::cout << "[" << "Antagonist" << "] "
-          << "[ID] "  << enemy.id.instanceId << "/" << enemy.id.typeId << " "
-          << "[HP] "  << enemy.health.current() << "/" << enemy.health.effective() << "/" << enemy.health.base() << " "
-          << "[STR] " << enemy.strength.effective() << "/" << enemy.strength.base() << " "
-          << "[DEF] " << enemy.defense.effective() << "/" << enemy.defense.base() << '\n';
+inline void printCombatant(const Combatant& combatant) {
+    std::cout << "[ID] " << combatant.id().instanceId << "/" << combatant.id().typeId << " "
+              << "[HP] " << combatant.health().current() << "/" << combatant.health().effective()
+              << "/" << combatant.health().base() << " "
+              << "[STR] " << combatant.strength().effective() << "/" << combatant.strength().base()
+              << " "
+              << "[DEF] " << combatant.defense().effective() << "/" << combatant.defense().base()
+              << '\n';
 }
 
 } // namespace Rpg::Tests

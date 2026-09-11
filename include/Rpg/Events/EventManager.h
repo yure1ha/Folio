@@ -8,58 +8,36 @@
 #include <utility>
 #include <vector>
 
-namespace Rpg
-{
+namespace Rpg {
 
 template <typename T>
-class EventManager
-{
-public:
-  using SystemCallback = std::function<void(const T&)>;
+class EventManager {
+  public:
+    using SystemCallback = std::function<void(const T&)>;
 
-  struct Subscriber
-  {
-    SystemType type {};
-    SystemCallback callback {};
-  };
+    struct Subscriber {
+        SystemType type {};
+        SystemCallback callback {};
+    };
 
-  void subscribe(SystemType systemType, SystemCallback callback)
-  {
-    const bool isSubscribed {std::ranges::any_of(m_subscribers, [systemType](const Subscriber& subscriber)
-    {
-      return systemType == subscriber.type;
+    void subscribe(SystemType systemType, SystemCallback callback) {
+        m_subscribers.push_back(Subscriber {.type = systemType, .callback = std::move(callback)});
     }
-    )};
 
-    if (!isSubscribed)
-    {
-      m_subscribers.push_back(Subscriber {.type = systemType, .callback = std::move(callback)});
+    void unsubscribe(SystemType systemType) {
+        std::erase_if(m_subscribers, [systemType](const Subscriber& subscriber) {
+            return systemType == subscriber.type;
+        });
     }
-  }
 
-  void unsubscribe(SystemType systemType)
-  {
-    std::erase_if(m_subscribers, [systemType](const Subscriber& subscriber)
-    {
-      return systemType == subscriber.type;
-    });
-  }
-
-  void unsubscribeAll()
-  {
-    m_subscribers.clear();
-  }
-
-  void dispatch(const T& event)
-  {
-    for (const auto& subscriber : m_subscribers)
-    {
-      subscriber.callback(event);
+    void dispatch(const T& event) const {
+        for (const auto& subscriber : m_subscribers) {
+            subscriber.callback(event);
+        }
     }
-  }
 
-private:
-  std::vector<Subscriber> m_subscribers {};
+  private:
+    std::vector<Subscriber> m_subscribers {};
 };
 
 } // namespace Rpg

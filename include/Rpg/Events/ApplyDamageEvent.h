@@ -1,14 +1,15 @@
 #pragma once
 
 #include "Rpg/Components/IdComponent.h"
+#include "Rpg/Events/EventManager.h"
 
-namespace Rpg
-{
+namespace Rpg {
 
-struct ApplyDamageEvent
-{
-  IdComponent sourceId;
-  IdComponent targetId;
+struct ApplyDamageEvent {
+    InstanceId sourceId {};
+    InstanceId targetId {};
 };
+
+using DamageEventManager = EventManager<ApplyDamageEvent>;
 
 } // namespace Rpg

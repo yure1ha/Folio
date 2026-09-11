@@ -2,23 +2,30 @@
 
 #include "Rpg/Components/IdComponent.h"
 
-namespace Rpg
-{
+namespace Rpg {
 
-class Entity
-{
-public:
-  Entity() = default;
+class Entity {
+  public:
+    explicit Entity(IdComponent id) : m_id {id} {}
 
-  explicit Entity(IdComponent id) : m_id {id}
-  {
-  }
+    virtual ~Entity() = default;
 
-  IdComponent& id()      { return m_id; }
-  IdComponent id() const { return m_id; }
+    Entity(const Entity&) = delete;
+    Entity& operator=(const Entity&) = delete;
 
-protected:
-  IdComponent m_id;
+    Entity(Entity&&) = delete;
+    Entity& operator=(Entity&&) = delete;
+
+    IdComponent& id() {
+        return m_id;
+    }
+
+    IdComponent id() const {
+        return m_id;
+    }
+
+  private:
+    IdComponent m_id;
 };
 
 } // namespace Rpg

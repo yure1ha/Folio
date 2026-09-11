@@ -6,16 +6,14 @@
 
 #include <cstdint>
 
-namespace Rpg
-{
+namespace Rpg {
 
-struct Consumable
-{
-  IdComponent id;
-  StackComponent stack;
-  StatusModifier modifier;
+struct Consumable {
+    IdComponent id;
+    StackComponent stack;
+    StatusModifier modifier;
 
-  std::int32_t sortKey() const { return stack.current(); }
+    std::int32_t sortKey() const { return stack.current(); }
 };
 
 } // namespace Rpg

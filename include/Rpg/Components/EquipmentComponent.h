@@ -1,17 +1,15 @@
 #pragma once
 
-#include "Rpg/Items/Weapon.h"
 #include "Rpg/Items/Armor.h"
+#include "Rpg/Items/Weapon.h"
 
 #include <optional>
 
-namespace Rpg
-{
+namespace Rpg {
 
-struct EquipmentComponent
-{
-  std::optional<Weapon> weapon;
-  std::optional<Armor> armor;
+struct EquipmentComponent {
+    std::optional<Weapon> weapon;
+    std::optional<Armor> armor;
 };
 
 } // namespace Rpg

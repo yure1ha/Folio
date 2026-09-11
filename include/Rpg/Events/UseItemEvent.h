@@ -2,12 +2,10 @@
 
 #include "Rpg/Components/IdComponent.h"
 
-namespace Rpg
-{
+namespace Rpg {
 
-struct UseItemEvent
-{
-  IdComponent itemId;
+struct UseItemEvent {
+    IdComponent itemId;
 };
 
 } // namespace Rpg

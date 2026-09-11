@@ -3,15 +3,16 @@
 #include <compare>
 #include <cstdint>
 
-namespace Rpg
-{
+namespace Rpg {
 
-struct IdComponent
-{
-  std::int32_t typeId {};
-  std::int32_t instanceId {};
+using InstanceId = std::int32_t;
+using TypeId = std::int32_t;
 
-  auto operator<=>(const IdComponent&) const = default;
+struct IdComponent {
+    TypeId typeId {};
+    InstanceId instanceId {};
+
+    auto operator<=>(const IdComponent&) const = default;
 };
 
 } // namespace Rpg
