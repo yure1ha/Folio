@@ -1,13 +1,15 @@
 Language: Cpp
 Standard: Latest
 BasedOnStyle: LLVM
-IndentWidth: 4
 ColumnLimit: 100
 InsertNewlineAtEOF: true
 IncludeBlocks: Regroup
 BreakBeforeBraces: Attach
 BreakConstructorInitializers: BeforeColon
+ConstructorInitializerIndentWidth: 4
+AlignAfterOpenBracket: true
 AlwaysBreakTemplateDeclarations: Yes
+LambdaBodyIndentation: OuterScope
 AllowShortFunctionsOnASingleLine: Empty
 AllowShortLambdasOnASingleLine: Empty
 AllowShortIfStatementsOnASingleLine: WithoutElse

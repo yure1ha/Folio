@@ -7,10 +7,10 @@
 namespace Rpg {
 
 struct ApplyStatusModifierEvent {
-    StatusModifier modifier;
-    InstanceId targetId {};
+  StatusModifier modifier;
+  IdComponent targetId;
 };
 
-using ModifierEventManager = EventManager<ApplyStatusModifierEvent>;
+using ApplyStatusModifierEventManager = EventManager<ApplyStatusModifierEvent>;
 
 } // namespace Rpg

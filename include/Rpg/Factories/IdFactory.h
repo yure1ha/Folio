@@ -1,5 +1,7 @@
 #pragma once
 
+#include "Rpg/Core/Types.h"
+
 #include <algorithm>
 #include <cstdint>
 #include <vector>
@@ -7,32 +9,30 @@
 namespace Rpg {
 
 class IdFactory {
-  public:
-    IdFactory() = default;
+public:
+  InstanceId allocate() {
+    if (!m_freeIds.empty()) {
+      const auto instanceId {m_freeIds.back()};
+      m_freeIds.pop_back();
 
-    static constexpr std::int32_t kMinInstanceId {1};
-
-    InstanceId allocate() {
-        if (!m_freeIds.empty()) {
-            const std::int32_t instanceId {m_freeIds.back()};
-            m_freeIds.pop_back();
-
-            return instanceId;
-        }
-
-        return m_instanceId++;
+      return instanceId;
     }
 
-    void free(InstanceId id) {
-        if (id < kMinInstanceId || id >= m_instanceId) return;
-        if (std::ranges::find(m_freeIds, id) != m_freeIds.end()) return;
+    return m_instanceId++;
+  }
 
-        m_freeIds.push_back(id);
-    }
+  void free(InstanceId id) {
+    if (id < kMinInstanceId || id >= m_instanceId) return;
+    if (std::ranges::find(m_freeIds, id) != m_freeIds.end()) return;
 
-  private:
-    std::vector<std::int32_t> m_freeIds {};
-    std::int32_t m_instanceId {kMinInstanceId};
+    m_freeIds.push_back(id);
+  }
+
+private:
+  static constexpr InstanceId kMinInstanceId {1};
+
+  std::vector<InstanceId> m_freeIds {};
+  InstanceId m_instanceId {kMinInstanceId};
 };
 
 } // namespace Rpg

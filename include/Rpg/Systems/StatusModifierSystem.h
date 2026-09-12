@@ -6,58 +6,65 @@
 #include "Rpg/Entities/Combatant.h"
 #include "Rpg/Entities/EntityManager.h"
 #include "Rpg/Events/ApplyStatusModifierEvent.h"
+#include "Rpg/Events/RemoveStatusModifierEvent.h"
 #include "Rpg/Modifiers/StatusModifier.h"
-
-#include <cstdint>
 
 namespace Rpg {
 
 class StatusModifierSystem {
-  public:
-    using ModifierList = ContainerComponent<StatusModifier>;
+public:
+  using ModifierList = ContainerComponent<StatusModifier>;
 
-    StatusModifierSystem(EntityManager& entityManager, ModifierEventManager& eventManager);
-    ~StatusModifierSystem();
+  StatusModifierSystem(EntityManager& entityManager, ApplyStatusModifierEventManager& eventManager,
+                       RemoveStatusModifierEventManager& removeModifierManager);
 
-    StatusModifierSystem(const StatusModifierSystem&) = delete;
-    StatusModifierSystem& operator=(const StatusModifierSystem&) = delete;
+  ~StatusModifierSystem();
 
-    StatusModifierSystem(StatusModifierSystem&&) noexcept = delete;
-    StatusModifierSystem& operator=(StatusModifierSystem&&) noexcept = delete;
+  StatusModifierSystem(const StatusModifierSystem&) = delete;
+  StatusModifierSystem& operator=(const StatusModifierSystem&) = delete;
 
-    void addModifier(const StatusModifier& modifier, InstanceId targetId) const;
-    void removeModifier(const StatusModifier& modifier, InstanceId targetId) const;
+  StatusModifierSystem(StatusModifierSystem&&) noexcept = delete;
+  StatusModifierSystem& operator=(StatusModifierSystem&&) noexcept = delete;
 
-    template <Concepts::AttributeComponent T>
-    static void applyModifier(const StatusModifier& modifier, T& attr) {
-        if (!modifier.isActive() || modifier.type != T::kModifierType) return;
+  static constexpr SystemType type() {
+    return SystemType::StatusModifier;
+  }
 
-        if (const auto total {modifier.total()}; total > 0) {
-            attr.increase(total);
-        }
+  void addModifier(const StatusModifier& modifier, IdComponent targetId) const;
+  void removeModifier(IdComponent modifierId, IdComponent targetId) const;
 
-        else if (total < 0) {
-            attr.decrease(-total);
-        }
+  template <Concepts::AttributeComponent T>
+  static void applyModifier(const StatusModifier& modifier, T& attr) {
+    if (!modifier.isActive() || modifier.type != T::kModifierType) return;
+
+    if (const auto total {modifier.total()}; total > 0) {
+      attr.increase(total);
     }
 
-    static void updateModifiers(Combatant& target) {
-        target.health().reset();
-        target.strength().reset();
-        target.defense().reset();
-
-        for (const auto& modifier : target.modifiers()) {
-            applyModifier(modifier, target.health());
-            applyModifier(modifier, target.strength());
-            applyModifier(modifier, target.defense());
-        }
+    else if (total < 0) {
+      attr.decrease(-total);
     }
+  }
 
-  private:
-    void onApplyStatusModifier(const ApplyStatusModifierEvent& event) const;
+  static void updateModifiers(Combatant& target) {
+    target.health().reset();
+    target.strength().reset();
+    target.defense().reset();
 
-    EntityManager& m_entityManager;
-    ModifierEventManager& m_modifierEventManager;
+    for (const auto& modifier : target.modifiers()) {
+      applyModifier(modifier, target.health());
+      applyModifier(modifier, target.strength());
+      applyModifier(modifier, target.defense());
+    }
+  }
+
+private:
+  void onApplyStatusModifier(const ApplyStatusModifierEvent& event) const;
+  void onRemoveStatusModifier(const RemoveStatusModifierEvent& event) const;
+
+  EntityManager& m_entityManager;
+  ApplyStatusModifierEventManager& m_applyModifierManager;
+  RemoveStatusModifierEventManager& m_removeModifierManager;
 };
 
 } // namespace Rpg

@@ -5,11 +5,11 @@
 
 namespace Rpg {
 
-struct ApplyDamageEvent {
-  IdComponent sourceId;
+struct RemoveStatusModifierEvent {
+  IdComponent modifierId;
   IdComponent targetId;
 };
 
-using DamageEventManager = EventManager<ApplyDamageEvent>;
+using RemoveStatusModifierEventManager = EventManager<RemoveStatusModifierEvent>;
 
 } // namespace Rpg

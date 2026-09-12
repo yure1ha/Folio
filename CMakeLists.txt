@@ -19,6 +19,9 @@ add_library(Rpg
         include/Rpg/Concepts/AttributeComponent.h
         include/Rpg/Concepts/ContainerItem.h
 
+        # Core
+        include/Rpg/Core/Types.h
+
         # Entities
         include/Rpg/Entities/EntityManager.h
         include/Rpg/Entities/Entity.h
@@ -34,11 +37,12 @@ add_library(Rpg
         # Events
         include/Rpg/Events/EventManager.h
         include/Rpg/Events/ApplyStatusModifierEvent.h
+        include/Rpg/Events/RemoveStatusModifierEvent.h
         include/Rpg/Events/ApplyDamageEvent.h
-        include/Rpg/Events/UseItemEvent.h
 
         # Factories
         include/Rpg/Factories/IdFactory.h
+        include/Rpg/Factories/EntityFactory.h
 
         # Items
         include/Rpg/Items/Consumable.h

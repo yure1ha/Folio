@@ -3,34 +3,39 @@
 #include "Rpg/Components/DefenseComponent.h"
 #include "Rpg/Components/IdComponent.h"
 #include "Rpg/Components/StrengthComponent.h"
-#include "Rpg/Entities/Combatant.h"
+#include "Rpg/Core/Types.h"
 #include "Rpg/Entities/EntityManager.h"
 #include "Rpg/Events/ApplyDamageEvent.h"
-#include "Rpg/Events/EventManager.h"
-
-#include <cstdint>
+#include "Rpg/Systems/SystemType.h"
 
 namespace Rpg {
 
 class CombatSystem {
-  public:
-    CombatSystem(EntityManager& entityManager, DamageEventManager& damageEventManager);
-    ~CombatSystem();
+public:
+  CombatSystem(EntityManager& entityManager, DamageEventManager& damageEventManager);
 
-    CombatSystem(const CombatSystem&) = delete;
-    CombatSystem& operator=(const CombatSystem&) = delete;
+  ~CombatSystem();
 
-    CombatSystem(CombatSystem&&) noexcept = delete;
-    CombatSystem& operator=(CombatSystem&&) noexcept = delete;
+  CombatSystem(const CombatSystem&) = delete;
+  CombatSystem& operator=(const CombatSystem&) = delete;
 
-    static std::int32_t calculateDamage(const StrengthComponent& str, const DefenseComponent& def);
-    void applyDamage(InstanceId sourceId, InstanceId targetId) const;
+  CombatSystem(CombatSystem&&) noexcept = delete;
+  CombatSystem& operator=(CombatSystem&&) noexcept = delete;
 
-  private:
-    void onApplyDamage(const ApplyDamageEvent& event) const;
+  static constexpr SystemType type() {
+    return SystemType::Combat;
+  }
 
-    EntityManager& m_entityManager;
-    DamageEventManager& m_damageEventManager;
+  static Damage calculateDamage(StrengthComponent str, DefenseComponent def);
+  void applyDamage(IdComponent sourceId, IdComponent targetId) const;
+
+private:
+  static constexpr Strength kStrengthMultiplier {2};
+
+  void onApplyDamage(const ApplyDamageEvent& event) const;
+
+  EntityManager& m_entityManager;
+  DamageEventManager& m_damageEventManager;
 };
 
 } // namespace Rpg

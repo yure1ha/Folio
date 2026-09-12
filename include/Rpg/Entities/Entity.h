@@ -2,30 +2,34 @@
 
 #include "Rpg/Components/IdComponent.h"
 
+#include <memory>
+
 namespace Rpg {
 
 class Entity {
-  public:
-    explicit Entity(IdComponent id) : m_id {id} {}
+public:
+  explicit Entity(IdComponent id) : m_id {id} {}
 
-    virtual ~Entity() = default;
+  virtual ~Entity() = default;
 
-    Entity(const Entity&) = delete;
-    Entity& operator=(const Entity&) = delete;
+  Entity(const Entity&) = delete;
+  Entity& operator=(const Entity&) = delete;
 
-    Entity(Entity&&) = delete;
-    Entity& operator=(Entity&&) = delete;
+  Entity(Entity&&) = delete;
+  Entity& operator=(Entity&&) = delete;
 
-    IdComponent& id() {
-        return m_id;
-    }
+  IdComponent& id() {
+    return m_id;
+  }
 
-    IdComponent id() const {
-        return m_id;
-    }
+  IdComponent id() const {
+    return m_id;
+  }
 
-  private:
-    IdComponent m_id;
+private:
+  IdComponent m_id;
 };
+
+using EntityUPtr = std::unique_ptr<Entity>;
 
 } // namespace Rpg

@@ -1,5 +1,6 @@
 #pragma once
 
+#include "Rpg/Core/Types.h"
 #include "Rpg/Modifiers/StatusModifierType.h"
 
 #include <algorithm>
@@ -8,81 +9,84 @@
 namespace Rpg {
 
 class HealthComponent {
-  public:
-    explicit HealthComponent(std::int32_t base) : HealthComponent {base, base, base} {}
+public:
+  explicit HealthComponent(Health base) : HealthComponent {base, base, base} {}
 
-    HealthComponent(std::int32_t base, std::int32_t effective, std::int32_t current)
-        : m_base {base}, m_effective {effective}, m_current {current} {
-        clamp();
-    }
+  HealthComponent(Health base, Health effective, Health current)
+      : m_base {base}, m_effective {effective}, m_current {current} {
+    clamp();
+  }
 
-    static constexpr std::int32_t kMinHealth {0};
-    static constexpr std::int32_t kMaxHealth {9999};
-    static constexpr auto kModifierType {StatusModifierType::Health};
+  static constexpr StatusModifierType type() {
+    return StatusModifierType::Health;
+  }
 
-    std::int32_t base() const {
-        return m_base;
-    }
+  Health base() const {
+    return m_base;
+  }
 
-    std::int32_t effective() const {
-        return m_effective;
-    }
+  Health effective() const {
+    return m_effective;
+  }
 
-    std::int32_t current() const {
-        return m_current;
-    }
+  Health current() const {
+    return m_current;
+  }
 
-    bool isAlive() const {
-        return m_current > kMinHealth;
-    }
+  bool alive() const {
+    return m_current > kMinHealth;
+  }
 
-    void increase(std::int32_t amount) {
-        if (amount <= 0) return;
+  void increase(std::int32_t amount) {
+    if (amount <= 0) return;
 
-        m_effective += amount;
-        clamp();
-    }
+    m_effective += amount;
+    clamp();
+  }
 
-    void decrease(std::int32_t amount) {
-        if (amount <= 0) return;
+  void decrease(std::int32_t amount) {
+    if (amount <= 0) return;
 
-        m_effective -= amount;
-        clamp();
-    }
+    m_effective -= amount;
+    clamp();
+  }
 
-    void heal(std::int32_t amount) {
-        if (amount <= 0) return;
+  void heal(std::int32_t amount) {
+    if (amount <= 0) return;
 
-        m_current += amount;
-        clamp();
-    }
+    m_current += amount;
+    clamp();
+  }
 
-    void takeDamage(std::int32_t amount) {
-        if (amount <= 0) return;
+  void takeDamage(std::int32_t amount) {
+    if (amount <= 0) return;
 
-        m_current -= amount;
-        clamp();
-    }
+    m_current -= amount;
+    clamp();
+  }
 
-    void healFull() {
-        m_current = m_effective;
-    }
+  void healFull() {
+    m_current = m_effective;
+  }
 
-    void reset() {
-        m_effective = m_base;
-        clamp();
-    }
+  void reset() {
+    m_effective = m_base;
+    clamp();
+  }
 
-  private:
-    void clamp() {
-        m_base = std::clamp(m_base, kMinHealth, kMaxHealth);
-        m_effective = std::clamp(m_effective, kMinHealth, kMaxHealth);
-        m_current = std::clamp(m_current, kMinHealth, m_effective);
-    }
+private:
+  static constexpr Health kMinHealth {0};
+  static constexpr Health kMaxHealth {9999};
 
-    std::int32_t m_base {};
-    std::int32_t m_effective {};
-    std::int32_t m_current {};
+  void clamp() {
+    m_base = std::clamp(m_base, kMinHealth, kMaxHealth);
+    m_effective = std::clamp(m_effective, kMinHealth, kMaxHealth);
+    m_current = std::clamp(m_current, kMinHealth, m_effective);
+  }
+
+  Health m_base {};
+  Health m_effective {};
+  Health m_current {};
 };
 
 } // namespace Rpg

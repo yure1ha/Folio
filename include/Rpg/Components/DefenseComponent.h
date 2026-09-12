@@ -1,5 +1,6 @@
 #pragma once
 
+#include "Rpg/Core/Types.h"
 #include "Rpg/Modifiers/StatusModifierType.h"
 
 #include <algorithm>
@@ -8,53 +9,55 @@
 namespace Rpg {
 
 class DefenseComponent {
-  public:
-    explicit DefenseComponent(std::int32_t base) : DefenseComponent {base, base} {}
+public:
+  explicit DefenseComponent(Defense base) : DefenseComponent {base, base} {}
 
-    DefenseComponent(std::int32_t base, std::int32_t effective)
-        : m_base {base}, m_effective {effective} {
-        clamp();
-    };
+  DefenseComponent(Defense base, Defense effective) : m_base {base}, m_effective {effective} {
+    clamp();
+  };
 
-    static constexpr std::int32_t kMinDefense {1};
-    static constexpr std::int32_t kMaxDefense {99};
-    static constexpr auto kModifierType {StatusModifierType::Defense};
+  static constexpr StatusModifierType type() {
+    return StatusModifierType::Defense;
+  }
 
-    std::int32_t base() const {
-        return m_base;
-    }
+  Defense base() const {
+    return m_base;
+  }
 
-    std::int32_t effective() const {
-        return m_effective;
-    }
+  Defense effective() const {
+    return m_effective;
+  }
 
-    void increase(std::int32_t amount) {
-        if (amount <= 0) return;
+  void increase(std::int32_t amount) {
+    if (amount <= 0) return;
 
-        m_effective += amount;
-        clamp();
-    }
+    m_effective += amount;
+    clamp();
+  }
 
-    void decrease(std::int32_t amount) {
-        if (amount <= 0) return;
+  void decrease(std::int32_t amount) {
+    if (amount <= 0) return;
 
-        m_effective -= amount;
-        clamp();
-    }
+    m_effective -= amount;
+    clamp();
+  }
 
-    void reset() {
-        m_effective = m_base;
-        clamp();
-    }
+  void reset() {
+    m_effective = m_base;
+    clamp();
+  }
 
-  private:
-    void clamp() {
-        m_base = std::clamp(m_base, kMinDefense, kMaxDefense);
-        m_effective = std::clamp(m_effective, kMinDefense, kMaxDefense);
-    }
+private:
+  static constexpr Defense kMinDefense {1};
+  static constexpr Defense kMaxDefense {99};
 
-    std::int32_t m_base {};
-    std::int32_t m_effective {};
+  void clamp() {
+    m_base = std::clamp(m_base, kMinDefense, kMaxDefense);
+    m_effective = std::clamp(m_effective, kMinDefense, kMaxDefense);
+  }
+
+  Defense m_base {};
+  Defense m_effective {};
 };
 
 } // namespace Rpg

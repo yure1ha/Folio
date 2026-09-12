@@ -8,8 +8,8 @@
 namespace Rpg {
 
 struct EquipmentComponent {
-    std::optional<Weapon> weapon;
-    std::optional<Armor> armor;
+  std::optional<Weapon> weapon;
+  std::optional<Armor> armor;
 };
 
 } // namespace Rpg

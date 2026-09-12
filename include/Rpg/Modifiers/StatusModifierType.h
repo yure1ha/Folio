@@ -5,10 +5,10 @@
 namespace Rpg {
 
 enum class StatusModifierType : std::uint8_t {
-    Health,
-    Strength,
-    Defense,
-    None,
+  Health,
+  Strength,
+  Defense,
+  None,
 };
 
 } // namespace Rpg

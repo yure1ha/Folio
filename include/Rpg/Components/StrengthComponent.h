@@ -1,5 +1,6 @@
 #pragma once
 
+#include "Rpg/Core/Types.h"
 #include "Rpg/Modifiers/StatusModifierType.h"
 
 #include <algorithm>
@@ -8,53 +9,55 @@
 namespace Rpg {
 
 class StrengthComponent {
-  public:
-    explicit StrengthComponent(std::int32_t base) : StrengthComponent {base, base} {}
+public:
+  explicit StrengthComponent(Strength base) : StrengthComponent {base, base} {}
 
-    StrengthComponent(std::int32_t base, std::int32_t effective)
-        : m_base {base}, m_effective {effective} {
-        clamp();
-    }
+  StrengthComponent(Strength base, Strength effective) : m_base {base}, m_effective {effective} {
+    clamp();
+  }
 
-    static constexpr std::int32_t kMinStrength {1};
-    static constexpr std::int32_t kMaxStrength {99};
-    static constexpr auto kModifierType {StatusModifierType::Strength};
+  static constexpr StatusModifierType type() {
+    return StatusModifierType::Strength;
+  }
 
-    std::int32_t base() const {
-        return m_base;
-    }
+  Strength base() const {
+    return m_base;
+  }
 
-    std::int32_t effective() const {
-        return m_effective;
-    }
+  Strength effective() const {
+    return m_effective;
+  }
 
-    void increase(std::int32_t amount) {
-        if (amount <= 0) return;
+  void increase(std::int32_t amount) {
+    if (amount <= 0) return;
 
-        m_effective += amount;
-        clamp();
-    }
+    m_effective += amount;
+    clamp();
+  }
 
-    void decrease(std::int32_t amount) {
-        if (amount <= 0) return;
+  void decrease(std::int32_t amount) {
+    if (amount <= 0) return;
 
-        m_effective -= amount;
-        clamp();
-    }
+    m_effective -= amount;
+    clamp();
+  }
 
-    void reset() {
-        m_effective = m_base;
-        clamp();
-    }
+  void reset() {
+    m_effective = m_base;
+    clamp();
+  }
 
-  private:
-    void clamp() {
-        m_base = std::clamp(m_base, kMinStrength, kMaxStrength);
-        m_effective = std::clamp(m_effective, kMinStrength, kMaxStrength);
-    }
+private:
+  static constexpr Strength kMinStrength {1};
+  static constexpr Strength kMaxStrength {99};
 
-    std::int32_t m_base {};
-    std::int32_t m_effective {};
+  void clamp() {
+    m_base = std::clamp(m_base, kMinStrength, kMaxStrength);
+    m_effective = std::clamp(m_effective, kMinStrength, kMaxStrength);
+  }
+
+  Strength m_base {};
+  Strength m_effective {};
 };
 
 } // namespace Rpg

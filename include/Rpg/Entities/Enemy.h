@@ -6,8 +6,8 @@
 namespace Rpg {
 
 class Enemy : public Combatant {
-  public:
-    explicit Enemy(const EnemyBlueprint& bp);
+public:
+  explicit Enemy(const EnemyBlueprint& bp);
 };
 
 } // namespace Rpg

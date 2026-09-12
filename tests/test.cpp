@@ -5,7 +5,7 @@ void runCombatTests();
 } // namespace Rpg::Tests
 
 int main() {
-    Rpg::Tests::runCombatTests();
+  Rpg::Tests::runCombatTests();
 
-    return 0;
+  return 0;
 }

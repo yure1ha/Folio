@@ -1,36 +1,36 @@
 #pragma once
 
+#include "Rpg/Core/Types.h"
 #include "Rpg/Items/Armor.h"
 #include "Rpg/Items/Consumable.h"
 #include "Rpg/Items/Weapon.h"
 #include "Rpg/Modifiers/StatusModifier.h"
 
-#include <cstdint>
 #include <optional>
 #include <vector>
 
 namespace Rpg {
 
 struct CharacterBlueprint {
-    std::int32_t typeId {};
+  TypeId typeId {};
 
-    std::int32_t baseHealth {};
-    std::int32_t effectiveHealth {};
-    std::int32_t currentHealth {};
+  Health baseHealth {};
+  Health effectiveHealth {};
+  Health currentHealth {};
 
-    std::int32_t baseStrength {};
-    std::int32_t effectiveStrength {};
+  Strength baseStrength {};
+  Strength effectiveStrength {};
 
-    std::int32_t baseDefense {};
-    std::int32_t effectiveDefense {};
+  Defense baseDefense {};
+  Defense effectiveDefense {};
 
-    std::optional<Weapon> equippedWeapon {};
-    std::optional<Armor> equippedArmor {};
+  std::optional<Weapon> equippedWeapon {};
+  std::optional<Armor> equippedArmor {};
 
-    std::vector<Consumable> consumables {};
-    std::vector<Weapon> weapons {};
-    std::vector<Armor> armor {};
-    std::vector<StatusModifier> modifiers {};
+  std::vector<Consumable> consumables {};
+  std::vector<Weapon> weapons {};
+  std::vector<Armor> armor {};
+  std::vector<StatusModifier> modifiers {};
 };
 
 } // namespace Rpg
