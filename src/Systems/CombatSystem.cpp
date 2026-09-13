@@ -1,13 +1,13 @@
 #include "Rpg/Systems/CombatSystem.h"
 
+#include "Rpg/Systems/EntityManager.h"
+#include "Rpg/Systems/EventManager.h"
 #include "Rpg/Components/DefenseComponent.h"
 #include "Rpg/Components/IdComponent.h"
 #include "Rpg/Components/StrengthComponent.h"
 #include "Rpg/Core/Types.h"
 #include "Rpg/Entities/Combatant.h"
-#include "Rpg/Entities/EntityManager.h"
 #include "Rpg/Events/ApplyDamageEvent.h"
-#include "Rpg/Events/EventManager.h"
 
 namespace Rpg {
 
@@ -30,8 +30,8 @@ void CombatSystem::applyDamage(IdComponent sourceId, IdComponent targetId) const
   auto source {m_entityManager.find<Combatant>(sourceId)};
   auto target {m_entityManager.find<Combatant>(targetId)};
 
-  const auto amount {calculateDamage(source->strength(), target->defense())};
-  target->health().takeDamage(amount);
+  const auto damage {calculateDamage(source->strength(), target->defense())};
+  target->takeDamage(damage);
 }
 
 void CombatSystem::onApplyDamage(const ApplyDamageEvent& event) const {

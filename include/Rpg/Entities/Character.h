@@ -1,6 +1,8 @@
 #pragma once
 
 #include "Rpg/Components/ContainerComponent.h"
+#include "Rpg/Components/EquipmentComponent.h"
+#include "Rpg/Core/Types.h"
 #include "Rpg/Entities/CharacterBlueprint.h"
 #include "Rpg/Entities/Combatant.h"
 #include "Rpg/Items/Armor.h"
@@ -17,16 +19,8 @@ public:
 
   explicit Character(const CharacterBlueprint& bp);
 
-  ConsumableInventory& consumables() {
-    return m_consumables;
-  }
-
-  WeaponInventory& weapons() {
-    return m_weapons;
-  }
-
-  ArmorInventory& armor() {
-    return m_armor;
+  const EquipmentComponent& equipment() const {
+    return m_equipment;
   }
 
   const ConsumableInventory& consumables() const {
@@ -41,7 +35,14 @@ public:
     return m_armor;
   }
 
+  void useConsumable(IdComponent consumableId);
+  void unequipWeapon();
+  void unequipArmor();
+  void equipWeapon(IdComponent weaponId);
+  void equipArmor(IdComponent armorId);
+
 private:
+  EquipmentComponent m_equipment;
   ConsumableInventory m_consumables;
   WeaponInventory m_weapons;
   ArmorInventory m_armor;

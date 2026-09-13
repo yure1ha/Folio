@@ -1,13 +1,13 @@
 #pragma once
 
+#include "EntityManager.h"
 #include "Rpg/Components/ContainerComponent.h"
 #include "Rpg/Components/IdComponent.h"
 #include "Rpg/Concepts/ContainerItem.h"
-#include "Rpg/Entities/EntityManager.h"
 #include "Rpg/Items/Armor.h"
 #include "Rpg/Items/Consumable.h"
 #include "Rpg/Items/Weapon.h"
-#include "Rpg/Systems/StatusModifierSystem.h"
+#include "Rpg/Systems/ModifierSystem.h"
 #include "Rpg/Systems/SystemType.h"
 
 namespace Rpg {
@@ -18,7 +18,7 @@ public:
   using WeaponInventory = ContainerComponent<Weapon>;
   using ArmorInventory = ContainerComponent<Armor>;
 
-  InventorySystem(EntityManager& entityManager, StatusModifierSystem& modifierSystem);
+  InventorySystem(EntityManager& entityManager, ModifierSystem& modifierSystem);
 
   static constexpr SystemType type() {
     return SystemType::Inventory;
@@ -34,15 +34,15 @@ public:
     inventory.remove(item.id);
   }
 
-  void useConsumable(const Consumable& consumable, IdComponent targetId) const;
+  void useConsumable(IdComponent consumableId, IdComponent targetId) const;
   void unequipWeapon(IdComponent targetId) const;
   void unequipArmor(IdComponent targetId) const;
-  void equipWeapon(const Weapon& weapon, IdComponent targetId) const;
-  void equipArmor(const Armor& armor, IdComponent targetId) const;
+  void equipWeapon(IdComponent weaponId, IdComponent targetId) const;
+  void equipArmor(IdComponent armorId, IdComponent targetId) const;
 
 private:
   EntityManager& m_entityManager;
-  StatusModifierSystem& m_modifierSystem;
+  ModifierSystem& m_modifierSystem;
 };
 
 } // namespace Rpg

@@ -1,7 +1,7 @@
 #pragma once
 
+#include "Rpg/Systems/EventManager.h"
 #include "Rpg/Components/IdComponent.h"
-#include "Rpg/Events/EventManager.h"
 #include "Rpg/Modifiers/StatusModifier.h"
 
 namespace Rpg {

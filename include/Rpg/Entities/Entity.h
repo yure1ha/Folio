@@ -1,6 +1,7 @@
 #pragma once
 
 #include "Rpg/Components/IdComponent.h"
+#include "Rpg/Core/Types.h"
 
 #include <memory>
 
@@ -18,12 +19,12 @@ public:
   Entity(Entity&&) = delete;
   Entity& operator=(Entity&&) = delete;
 
-  IdComponent& id() {
+  IdComponent id() const {
     return m_id;
   }
 
-  IdComponent id() const {
-    return m_id;
+  void setInstanceId(InstanceId id) {
+    m_id.instanceId = id;
   }
 
 private:

@@ -1,10 +1,10 @@
 #pragma once
 
+#include "EntityManager.h"
 #include "Rpg/Components/DefenseComponent.h"
 #include "Rpg/Components/IdComponent.h"
 #include "Rpg/Components/StrengthComponent.h"
 #include "Rpg/Core/Types.h"
-#include "Rpg/Entities/EntityManager.h"
 #include "Rpg/Events/ApplyDamageEvent.h"
 #include "Rpg/Systems/SystemType.h"
 

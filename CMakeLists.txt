@@ -7,13 +7,13 @@ set(CMAKE_CXX_EXTENSIONS OFF)
 
 add_library(Rpg
         # Components
-        include/Rpg/Components/IdComponent.h
         include/Rpg/Components/ContainerComponent.h
-        include/Rpg/Components/HealthComponent.h
         include/Rpg/Components/DefenseComponent.h
-        include/Rpg/Components/StrengthComponent.h
-        include/Rpg/Components/StackComponent.h
         include/Rpg/Components/EquipmentComponent.h
+        include/Rpg/Components/HealthComponent.h
+        include/Rpg/Components/IdComponent.h
+        include/Rpg/Components/StackComponent.h
+        include/Rpg/Components/StrengthComponent.h
 
         # Concepts
         include/Rpg/Concepts/AttributeComponent.h
@@ -23,45 +23,49 @@ add_library(Rpg
         include/Rpg/Core/Types.h
 
         # Entities
-        include/Rpg/Entities/EntityManager.h
-        include/Rpg/Entities/Entity.h
-        include/Rpg/Entities/Combatant.h
-        src/Entities/Combatant.cpp
         include/Rpg/Entities/Character.h
-        src/Entities/Character.cpp
-        include/Rpg/Entities/Enemy.h
-        src/Entities/Enemy.cpp
         include/Rpg/Entities/CharacterBlueprint.h
+        include/Rpg/Entities/Combatant.h
+        include/Rpg/Entities/Enemy.h
         include/Rpg/Entities/EnemyBlueprint.h
+        include/Rpg/Entities/Entity.h
+        src/Entities/Character.cpp
+        src/Entities/Combatant.cpp
+        src/Entities/Enemy.cpp
 
         # Events
-        include/Rpg/Events/EventManager.h
+        include/Rpg/Events/ApplyDamageEvent.h
+        include/Rpg/Events/ApplyInstantModifierEvent.h
         include/Rpg/Events/ApplyStatusModifierEvent.h
         include/Rpg/Events/RemoveStatusModifierEvent.h
-        include/Rpg/Events/ApplyDamageEvent.h
 
         # Factories
-        include/Rpg/Factories/IdFactory.h
         include/Rpg/Factories/EntityFactory.h
+        include/Rpg/Factories/IdFactory.h
 
         # Items
+        include/Rpg/Items/Armor.h
         include/Rpg/Items/Consumable.h
         include/Rpg/Items/Weapon.h
-        include/Rpg/Items/Armor.h
 
         # Modifiers
-        include/Rpg/Modifiers/StatusModifierType.h
+        include/Rpg/Modifiers/InstantModifier.h
+        include/Rpg/Modifiers/InstantModifierType.h
         include/Rpg/Modifiers/StatusModifier.h
+        include/Rpg/Modifiers/StatusModifierType.h
 
         # Systems
-        include/Rpg/Systems/SystemType.h
-        include/Rpg/Systems/StatusModifierSystem.h
-        src/Systems/StatusModifierSystem.cpp
-        include/Rpg/Systems/InventorySystem.h
-        src/Systems/InventorySystem.cpp
         include/Rpg/Systems/CombatSystem.h
+        include/Rpg/Systems/EntityManager.h
+        include/Rpg/Systems/EventManager.h
+        include/Rpg/Systems/InventorySystem.h
+        include/Rpg/Systems/ModifierSystem.h
+        include/Rpg/Systems/SystemType.h
         src/Systems/CombatSystem.cpp
+        src/Systems/InventorySystem.cpp
+        src/Systems/ModifierSystem.cpp
 )
+
 
 target_include_directories(Rpg PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/include)
 

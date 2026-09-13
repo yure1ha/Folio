@@ -1,11 +1,11 @@
+#include "Rpg/Systems/EntityManager.h"
+#include "Rpg/Systems/EventManager.h"
 #include "Helpers.h"
 #include "Rpg/Components/StackComponent.h"
 #include "Rpg/Entities/Character.h"
 #include "Rpg/Entities/Enemy.h"
-#include "Rpg/Entities/EntityManager.h"
 #include "Rpg/Events/ApplyDamageEvent.h"
 #include "Rpg/Events/ApplyStatusModifierEvent.h"
-#include "Rpg/Events/EventManager.h"
 #include "Rpg/Events/RemoveStatusModifierEvent.h"
 #include "Rpg/Factories/EntityFactory.h"
 #include "Rpg/Factories/IdFactory.h"
@@ -16,7 +16,7 @@
 #include "Rpg/Modifiers/StatusModifierType.h"
 #include "Rpg/Systems/CombatSystem.h"
 #include "Rpg/Systems/InventorySystem.h"
-#include "Rpg/Systems/StatusModifierSystem.h"
+#include "Rpg/Systems/ModifierSystem.h"
 
 namespace Rpg::Tests {
 
@@ -56,7 +56,7 @@ void runCombatTests() {
   const Consumable consumable {
       .id = {.typeId = 100, .instanceId = idFactory.allocate()},
       .stack = {99, 10},
-      .modifier = healthUp,
+      .statusModifier = healthUp,
   };
 
   const Weapon weapon {
@@ -118,7 +118,7 @@ void runCombatTests() {
 
   EventManager<ApplyStatusModifierEvent> applyModifierManager;
   EventManager<RemoveStatusModifierEvent> removeModifierManager;
-  StatusModifierSystem statusModifierSystem {entityManager, applyModifierManager,
+  ModifierSystem statusModifierSystem {entityManager, applyModifierManager,
                                              removeModifierManager};
 
   EventManager<ApplyDamageEvent> damageEventManager;
@@ -135,7 +135,7 @@ void runCombatTests() {
   combatSystem.applyDamage(antagonist.id(), protagonist.id());
   printCombatant(protagonist);
 
-  statusModifierSystem.addModifier(defenseDown, antagonist.id());
+  statusModifierSystem.addStatusModifier(defenseDown, antagonist.id());
   combatSystem.applyDamage(protagonist.id(), antagonist.id());
   printCombatant(antagonist);
 

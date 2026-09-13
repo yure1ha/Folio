@@ -3,7 +3,6 @@
 #include "Rpg/Components/IdComponent.h"
 #include "Rpg/Core/Types.h"
 #include "Rpg/Entities/Entity.h"
-#include "Rpg/Factories/IdFactory.h"
 
 #include <memory>
 #include <unordered_map>

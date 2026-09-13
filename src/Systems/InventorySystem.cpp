@@ -7,57 +7,76 @@
 #include "Rpg/Items/Armor.h"
 #include "Rpg/Items/Consumable.h"
 #include "Rpg/Items/Weapon.h"
-#include "Rpg/Systems/StatusModifierSystem.h"
+#include "Rpg/Systems/ModifierSystem.h"
+
+#include <utility>
 
 namespace Rpg {
 
-InventorySystem::InventorySystem(EntityManager& entityManager, StatusModifierSystem& modifierSystem)
+InventorySystem::InventorySystem(EntityManager& entityManager, ModifierSystem& modifierSystem)
     : m_entityManager {entityManager}, m_modifierSystem {modifierSystem} {}
 
-void InventorySystem::useConsumable(const Consumable& consumable, IdComponent targetId) const {
+void InventorySystem::useConsumable(IdComponent consumableId, IdComponent targetId) const {
   auto target {m_entityManager.find<Character>(targetId)};
-  if (!target || !target->consumables().contains(consumable.id)) return;
+  if (!target) return;
 
-  m_modifierSystem.addModifier(consumable.modifier, target->id());
-  target->consumables().remove(consumable.id);
+  const auto consumable {target->consumables().find(consumableId)};
+
+  if (consumable->hasStatusModifier()) {
+    m_modifierSystem.addStatusModifier(consumable->statusModifier, target->id());
+  }
+
+  if (consumable->hasInstantModifier()) {
+    m_modifierSystem.applyInstantModifier(consumable->instantModifier, target->id());
+  }
 }
 
 void InventorySystem::unequipWeapon(IdComponent targetId) const {
   auto target {m_entityManager.find<Character>(targetId)};
-  if (!target || !target->equipment().weapon.has_value()) return;
+  if (!target) return;
 
-  m_modifierSystem.removeModifier(target->equipment().weapon->id, target->id());
-  target->weapons().add(*target->equipment().weapon);
-  target->equipment().weapon.reset();
+  const auto previous {target->equipment().weapon};
+  target->unequipWeapon();
+
+  if (previous->hasStatusModifier()) {
+    m_modifierSystem.removeStatusModifier(previous->id, target->id());
+  }
 }
 
 void InventorySystem::unequipArmor(IdComponent targetId) const {
   auto target {m_entityManager.find<Character>(targetId)};
-  if (!target || !target->equipment().armor.has_value()) return;
+  if (!target) return;
 
-  m_modifierSystem.removeModifier(target->equipment().armor->id, target->id());
-  target->armor().add(*target->equipment().armor);
-  target->equipment().armor.reset();
+  const auto previous {target->equipment().armor};
+  target->unequipArmor();
+
+  if (previous->hasStatusModifier()) {
+    m_modifierSystem.removeStatusModifier(previous->id, target->id());
+  }
 }
 
-void InventorySystem::equipWeapon(const Weapon& weapon, IdComponent targetId) const {
+void InventorySystem::equipWeapon(IdComponent weaponId, IdComponent targetId) const {
   auto target {m_entityManager.find<Character>(targetId)};
-  if (!target || !target->weapons().contains(weapon.id)) return;
+  if (!target) return;
 
-  unequipWeapon(targetId);
-  m_modifierSystem.addModifier(weapon.modifier, target->id());
-  target->weapons().remove(weapon.id);
-  target->equipment().weapon = weapon;
+  const auto weapon {std::move(*target->weapons().find(weaponId))};
+  target->equipWeapon(weaponId);
+
+  if (weapon.hasStatusModifier()) {
+    m_modifierSystem.addStatusModifier(weapon.modifier, target->id());
+  }
 }
 
-void InventorySystem::equipArmor(const Armor& armor, IdComponent targetId) const {
+void InventorySystem::equipArmor(IdComponent armorId, IdComponent targetId) const {
   auto target {m_entityManager.find<Character>(targetId)};
-  if (!target || !target->armor().contains(armor.id)) return;
+  if (!target) return;
 
-  unequipArmor(targetId);
-  m_modifierSystem.addModifier(armor.modifier, target->id());
-  target->armor().remove(armor.id);
-  target->equipment().armor = armor;
+  const auto armor {std::move(*target->armor().find(armorId))};
+  target->equipArmor(armorId);
+
+  if (armor.hasStatusModifier()) {
+    m_modifierSystem.addStatusModifier(armor.modifier, target->id());
+  }
 }
 
 } // namespace Rpg

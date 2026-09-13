@@ -4,7 +4,6 @@
 #include "Rpg/Modifiers/StatusModifierType.h"
 
 #include <algorithm>
-#include <cstdint>
 
 namespace Rpg {
 
@@ -28,14 +27,14 @@ public:
     return m_effective;
   }
 
-  void increase(std::int32_t amount) {
-    if (amount <= 0) return;
+  void increase(Defense delta) {
+    if (delta <= 0) return;
 
-    m_effective += amount;
+    m_effective += delta;
     clamp();
   }
 
-  void decrease(std::int32_t amount) {
+  void decrease(Defense amount) {
     if (amount <= 0) return;
 
     m_effective -= amount;

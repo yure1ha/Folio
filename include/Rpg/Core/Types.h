@@ -12,6 +12,7 @@ using Strength = std::int32_t;
 using Defense = std::int32_t;
 using Stack = std::int32_t;
 
+using Modifier = std::int32_t;
 using Damage = std::int32_t;
 
 } // namespace Rpg

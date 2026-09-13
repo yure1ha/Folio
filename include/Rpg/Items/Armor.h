@@ -5,6 +5,7 @@
 #include "Rpg/Components/StackComponent.h"
 #include "Rpg/Core/Types.h"
 #include "Rpg/Modifiers/StatusModifier.h"
+#include "Rpg/Modifiers/StatusModifierType.h"
 
 namespace Rpg {
 
@@ -16,6 +17,10 @@ struct Armor {
 
   Defense sortKey() const {
     return defense.effective();
+  }
+
+  bool hasStatusModifier() const {
+    return modifier.type != StatusModifierType::None;
   }
 };
 

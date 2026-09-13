@@ -4,11 +4,10 @@
 
 namespace Rpg {
 
-enum class StatusModifierType : std::uint8_t {
+enum class InstantModifierType : std::uint8_t {
   None,
-  Health,
-  Strength,
-  Defense,
+  Heal,
+  Damage,
 };
 
 } // namespace Rpg

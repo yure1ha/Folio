@@ -4,6 +4,7 @@
 #include "Rpg/Concepts/ContainerItem.h"
 
 #include <algorithm>
+#include <cstdint>
 #include <utility>
 #include <vector>
 

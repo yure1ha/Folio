@@ -3,7 +3,6 @@
 #include "Rpg/Core/Types.h"
 
 #include <algorithm>
-#include <cstdint>
 
 namespace Rpg {
 
@@ -25,17 +24,17 @@ public:
     return m_current < kMinAmount;
   }
 
-  void increase(std::int32_t amount) {
-    if (amount <= 0) return;
+  void increase(Stack delta) {
+    if (delta <= 0) return;
 
-    m_current += amount;
+    m_current += delta;
     clamp();
   }
 
-  void decrease(std::int32_t amount) {
-    if (amount <= 0) return;
+  void decrease(Stack delta) {
+    if (delta <= 0) return;
 
-    m_current -= amount;
+    m_current -= delta;
     clamp();
   }
 

@@ -1,9 +1,9 @@
 #pragma once
 
+#include "Rpg/Systems/EntityManager.h"
 #include "Rpg/Components/IdComponent.h"
 #include "Rpg/Entities/CharacterBlueprint.h"
 #include "Rpg/Entities/EnemyBlueprint.h"
-#include "Rpg/Entities/EntityManager.h"
 #include "Rpg/Factories/IdFactory.h"
 
 #include <memory>
@@ -20,7 +20,7 @@ public:
     auto entity {std::make_unique<Entity>(bp)};
     const auto instanceId {m_idFactory.allocate()};
 
-    entity->id().instanceId = instanceId;
+    entity->setInstanceId(instanceId);
     m_entityManager.add(std::move(entity));
 
     return IdComponent {.typeId = bp.typeId, .instanceId = instanceId};
