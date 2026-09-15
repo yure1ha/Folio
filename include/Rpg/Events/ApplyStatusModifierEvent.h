@@ -8,6 +8,7 @@ namespace Rpg {
 
 struct ApplyStatusModifierEvent {
   StatusModifier modifier;
+  IdComponent sourceId;
   IdComponent targetId;
 };
 

@@ -11,7 +11,7 @@
 
 namespace Rpg {
 
-CombatSystem::CombatSystem(EntityManager& entityManager, DamageEventManager& damageEventManager)
+CombatSystem::CombatSystem(EntityManager& entityManager, ApplyDamageEventManager& damageEventManager)
     : m_entityManager {entityManager}, m_damageEventManager {damageEventManager} {
   m_damageEventManager.subscribe(type(), [this](const ApplyDamageEvent& event) {
     onApplyDamage(event);

@@ -10,6 +10,6 @@ struct ApplyDamageEvent {
   IdComponent targetId;
 };
 
-using DamageEventManager = EventManager<ApplyDamageEvent>;
+using ApplyDamageEventManager = EventManager<ApplyDamageEvent>;
 
 } // namespace Rpg

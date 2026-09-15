@@ -31,9 +31,13 @@ public:
     return SystemType::StatusModifier;
   }
 
-  void addStatusModifier(const StatusModifier& modifier, IdComponent targetId) const;
+  void addStatusModifier(const StatusModifier& modifier, IdComponent sourceId,
+                         IdComponent targetId) const;
+
   void removeStatusModifier(IdComponent modifierId, IdComponent targetId) const;
-  void applyInstantModifier(const InstantModifier& modifier, IdComponent targetId) const;
+
+  void applyInstantModifier(const InstantModifier& modifier, IdComponent sourceId,
+                            IdComponent targetId) const;
 
 private:
   void onApplyStatusModifier(const ApplyStatusModifierEvent& event) const;

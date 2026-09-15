@@ -8,6 +8,8 @@ namespace Rpg {
 
 class StackComponent {
 public:
+  StackComponent() = default;
+
   StackComponent(Stack max, Stack current) : m_max {max}, m_current {current} {
     clamp();
   }
@@ -46,8 +48,8 @@ private:
     m_max = std::clamp(m_max, kMinAmount, m_max);
   }
 
-  Stack m_max {};
-  Stack m_current {};
+  Stack m_max {kMinAmount};
+  Stack m_current {kMinAmount};
 };
 
 } // namespace Rpg

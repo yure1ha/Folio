@@ -9,26 +9,31 @@
 #include "Rpg/Items/Weapon.h"
 #include "Rpg/Systems/ModifierSystem.h"
 
-#include <utility>
-
 namespace Rpg {
 
 InventorySystem::InventorySystem(EntityManager& entityManager, ModifierSystem& modifierSystem)
     : m_entityManager {entityManager}, m_modifierSystem {modifierSystem} {}
 
-void InventorySystem::useConsumable(IdComponent consumableId, IdComponent targetId) const {
-  auto target {m_entityManager.find<Character>(targetId)};
+void InventorySystem::useConsumable(IdComponent consumableId, IdComponent sourceId,
+                                    IdComponent targetId) const {
+  auto source {m_entityManager.find<Character>(sourceId)};
+  if (!source) return;
+
+  auto target {m_entityManager.find<Combatant>(targetId)};
   if (!target) return;
 
-  const auto consumable {target->consumables().find(consumableId)};
+  const auto consumable {source->consumables().find(consumableId)};
+  if (consumable == source->consumables().end()) return;
 
   if (consumable->hasStatusModifier()) {
-    m_modifierSystem.addStatusModifier(consumable->statusModifier, target->id());
+    m_modifierSystem.addStatusModifier(consumable->statusModifier, source->id(), target->id());
   }
 
   if (consumable->hasInstantModifier()) {
-    m_modifierSystem.applyInstantModifier(consumable->instantModifier, target->id());
+    m_modifierSystem.applyInstantModifier(consumable->instantModifier, source->id(), target->id());
   }
+
+  source->useConsumable(consumableId);
 }
 
 void InventorySystem::unequipWeapon(IdComponent targetId) const {
@@ -59,11 +64,10 @@ void InventorySystem::equipWeapon(IdComponent weaponId, IdComponent targetId) co
   auto target {m_entityManager.find<Character>(targetId)};
   if (!target) return;
 
-  const auto weapon {std::move(*target->weapons().find(weaponId))};
   target->equipWeapon(weaponId);
 
-  if (weapon.hasStatusModifier()) {
-    m_modifierSystem.addStatusModifier(weapon.modifier, target->id());
+  if (target->equipment().weapon->hasStatusModifier()) {
+    m_modifierSystem.addStatusModifier(target->equipment().weapon->modifier, targetId, targetId);
   }
 }
 
@@ -71,11 +75,10 @@ void InventorySystem::equipArmor(IdComponent armorId, IdComponent targetId) cons
   auto target {m_entityManager.find<Character>(targetId)};
   if (!target) return;
 
-  const auto armor {std::move(*target->armor().find(armorId))};
   target->equipArmor(armorId);
 
-  if (armor.hasStatusModifier()) {
-    m_modifierSystem.addStatusModifier(armor.modifier, target->id());
+  if (target->equipment().armor->hasStatusModifier()) {
+    m_modifierSystem.addStatusModifier(target->equipment().armor->modifier, targetId, targetId);
   }
 }
 

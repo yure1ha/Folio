@@ -12,13 +12,14 @@ struct StatusModifier {
   StatusModifierType type {};
   StackComponent stack;
   Modifier value {};
+  TurnDuration duration {};
 
   Modifier sortKey() const {
     return value;
   }
 
   bool active() const {
-    return stack.current() > 0;
+    return stack.current() > 0 || duration > 0;
   }
 
   Modifier total() const {

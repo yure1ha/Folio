@@ -8,6 +8,7 @@ namespace Rpg {
 
 struct ApplyInstantModifierEvent {
   InstantModifier modifier;
+  IdComponent sourceId;
   IdComponent targetId;
 };
 

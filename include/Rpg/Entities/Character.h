@@ -2,7 +2,6 @@
 
 #include "Rpg/Components/ContainerComponent.h"
 #include "Rpg/Components/EquipmentComponent.h"
-#include "Rpg/Core/Types.h"
 #include "Rpg/Entities/CharacterBlueprint.h"
 #include "Rpg/Entities/Combatant.h"
 #include "Rpg/Items/Armor.h"
@@ -34,6 +33,10 @@ public:
   const ArmorInventory& armor() const {
     return m_armor;
   }
+
+  void addItem(Consumable consumable);
+  void addItem(Weapon weapon);
+  void addItem(Armor armor);
 
   void useConsumable(IdComponent consumableId);
   void unequipWeapon();

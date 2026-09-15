@@ -14,7 +14,7 @@
 namespace Rpg {
 
 Combatant::Combatant(IdComponent id, HealthComponent health, StrengthComponent strength,
-                     DefenseComponent defense, const ModifierList& modifiers)
+                     DefenseComponent defense, ModifierList modifiers)
     : Entity {id}, m_health {health}, m_strength {strength}, m_defense {defense},
       m_modifiers {std::move(modifiers)} {}
 

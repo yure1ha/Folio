@@ -12,7 +12,7 @@ namespace Rpg {
 
 class CombatSystem {
 public:
-  CombatSystem(EntityManager& entityManager, DamageEventManager& damageEventManager);
+  CombatSystem(EntityManager& entityManager, ApplyDamageEventManager& damageEventManager);
 
   ~CombatSystem();
 
@@ -35,7 +35,7 @@ private:
   void onApplyDamage(const ApplyDamageEvent& event) const;
 
   EntityManager& m_entityManager;
-  DamageEventManager& m_damageEventManager;
+  ApplyDamageEventManager& m_damageEventManager;
 };
 
 } // namespace Rpg

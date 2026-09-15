@@ -61,11 +61,15 @@ add_library(Rpg
         include/Rpg/Systems/InventorySystem.h
         include/Rpg/Systems/ModifierSystem.h
         include/Rpg/Systems/SystemType.h
+        include/Rpg/Systems/TurnManager.h
+        include/Rpg/Systems/TurnSystem.h
         src/Systems/CombatSystem.cpp
+        src/Systems/EntityManager.cpp
         src/Systems/InventorySystem.cpp
         src/Systems/ModifierSystem.cpp
+        src/Systems/TurnManager.cpp
+        src/Systems/TurnSystem.cpp
 )
-
 
 target_include_directories(Rpg PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/include)
 
@@ -73,8 +77,9 @@ add_executable(main main.cpp)
 target_link_libraries(main PRIVATE Rpg)
 
 add_executable(test tests/test.cpp
+        tests/Utilities.h
+        tests/Utilities.cpp
         tests/CombatTest.cpp
-        tests/Helpers.h
 )
 target_link_libraries(test PRIVATE Rpg)
 target_include_directories(test PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/tests)

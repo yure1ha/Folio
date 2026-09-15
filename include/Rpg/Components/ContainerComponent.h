@@ -2,9 +2,9 @@
 
 #include "Rpg/Components/IdComponent.h"
 #include "Rpg/Concepts/ContainerItem.h"
+#include "Rpg/Core/Types.h"
 
 #include <algorithm>
-#include <cstdint>
 #include <utility>
 #include <vector>
 
@@ -13,6 +13,9 @@ namespace Rpg {
 template <Concepts::ContainerItem T>
 class ContainerComponent {
 public:
+  using Iterator = std::vector<T>::iterator;
+  using ConstIterator = std::vector<T>::const_iterator;
+
   ContainerComponent() = default;
 
   explicit ContainerComponent(std::vector<T> items) : m_items {std::move(items)} {}
@@ -38,37 +41,38 @@ public:
   }
 
   bool contains(IdComponent id) const {
-    return std::ranges::any_of(m_items, [id](const T& comp) {
-      return id == comp.id;
-    });
+    return find(id) != end();
   }
 
-  auto find(IdComponent id) const {
+  ConstIterator find(IdComponent id) const {
     return std::ranges::find_if(m_items, [id](const T& comp) {
       return id == comp.id;
     });
   }
 
-  auto find(IdComponent id) {
+  Iterator find(IdComponent id) {
     return std::ranges::find_if(m_items, [id](const T& comp) {
       return id == comp.id;
     });
   }
 
-  void add(T item, std::int32_t amount = 1) {
+  void add(T item, Stack delta = 1) {
     if (auto it {find(item.id)}; it != end()) {
-      it->stack.increase(amount);
+      it->stack.increase(delta);
       return;
     }
 
     m_items.push_back(std::move(item));
   }
 
-  void remove(IdComponent id, std::int32_t amount = 1) {
-    auto it {find(id)};
+  void remove(IdComponent id, Stack delta = 1) {
+    remove(find(id), delta);
+  }
+
+  void remove(Iterator it, Stack delta = 1) {
     if (it == end()) return;
 
-    it->stack.decrease(amount);
+    it->stack.decrease(delta);
     if (it->stack.empty()) {
       m_items.erase(it);
     }

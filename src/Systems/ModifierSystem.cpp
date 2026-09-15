@@ -38,9 +38,9 @@ ModifierSystem::~ModifierSystem() {
   m_applyInstantModifierManager.unsubscribe(type());
 }
 
-void ModifierSystem::addStatusModifier(const StatusModifier& modifier, IdComponent targetId) const {
+void ModifierSystem::addStatusModifier(const StatusModifier& modifier, IdComponent sourceId, IdComponent targetId) const {
   m_applyStatusModifierManager.dispatch(
-      ApplyStatusModifierEvent {.modifier = modifier, .targetId = targetId});
+      ApplyStatusModifierEvent {.modifier = modifier, .sourceId = sourceId, .targetId = targetId});
 }
 
 void ModifierSystem::removeStatusModifier(IdComponent modifierId, IdComponent targetId) const {
@@ -48,10 +48,10 @@ void ModifierSystem::removeStatusModifier(IdComponent modifierId, IdComponent ta
       RemoveStatusModifierEvent {.modifierId = modifierId, .targetId = targetId});
 }
 
-void ModifierSystem::applyInstantModifier(const InstantModifier& modifier,
+void ModifierSystem::applyInstantModifier(const InstantModifier& modifier, IdComponent sourceId,
                                           IdComponent targetId) const {
   m_applyInstantModifierManager.dispatch(
-      ApplyInstantModifierEvent {.modifier = modifier, .targetId = targetId});
+      ApplyInstantModifierEvent {.modifier = modifier, .sourceId = sourceId, .targetId = targetId});
 }
 
 void ModifierSystem::onApplyStatusModifier(const ApplyStatusModifierEvent& event) const {

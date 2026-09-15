@@ -17,7 +17,7 @@ public:
   using ModifierList = ContainerComponent<StatusModifier>;
 
   Combatant(IdComponent id, HealthComponent health, StrengthComponent strength,
-            DefenseComponent defense, const ModifierList& modifiers);
+            DefenseComponent defense, ModifierList modifiers);
 
   HealthComponent health() const {
     return m_health;

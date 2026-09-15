@@ -34,7 +34,7 @@ public:
     inventory.remove(item.id);
   }
 
-  void useConsumable(IdComponent consumableId, IdComponent targetId) const;
+  void useConsumable(IdComponent consumableId, IdComponent sourceId, IdComponent targetId) const;
   void unequipWeapon(IdComponent targetId) const;
   void unequipArmor(IdComponent targetId) const;
   void equipWeapon(IdComponent weaponId, IdComponent targetId) const;

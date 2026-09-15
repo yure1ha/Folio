@@ -3,7 +3,6 @@
 #include "Rpg/Core/Types.h"
 
 #include <algorithm>
-#include <cstdint>
 #include <vector>
 
 namespace Rpg {

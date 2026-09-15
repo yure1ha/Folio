@@ -3,6 +3,7 @@
 #include "Rpg/Components/IdComponent.h"
 #include "Rpg/Core/Types.h"
 #include "Rpg/Entities/Entity.h"
+#include "Rpg/Factories/IdFactory.h"
 
 #include <memory>
 #include <unordered_map>
@@ -12,6 +13,8 @@ namespace Rpg {
 
 class EntityManager {
 public:
+  explicit EntityManager(IdFactory& idFactory);
+
   template <typename T>
   const T* find(IdComponent id) const {
     if (const auto it {m_entities.find(id.instanceId)}; it != m_entities.end()) {
@@ -26,18 +29,11 @@ public:
     return const_cast<T*>(std::as_const(*this).find<T>(id));
   }
 
-  void add(EntityUPtr entity) {
-    if (!entity) return;
-
-    const auto instanceId {entity->id().instanceId};
-    m_entities.try_emplace(instanceId, std::move(entity));
-  }
-
-  void destroy(IdComponent id) {
-    m_entities.erase(id.instanceId);
-  }
+  void add(EntityUPtr entity);
+  void destroy(IdComponent id);
 
 private:
+  IdFactory& m_idFactory;
   std::unordered_map<InstanceId, EntityUPtr> m_entities {};
 };
 

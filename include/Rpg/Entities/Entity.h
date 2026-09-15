@@ -16,8 +16,8 @@ public:
   Entity(const Entity&) = delete;
   Entity& operator=(const Entity&) = delete;
 
-  Entity(Entity&&) = delete;
-  Entity& operator=(Entity&&) = delete;
+  Entity(Entity&&) noexcept = delete;
+  Entity& operator=(Entity&&) noexcept = delete;
 
   IdComponent id() const {
     return m_id;

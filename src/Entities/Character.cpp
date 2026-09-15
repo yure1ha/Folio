@@ -8,6 +8,8 @@
 #include "Rpg/Entities/CharacterBlueprint.h"
 #include "Rpg/Entities/Combatant.h"
 
+#include <utility>
+
 namespace Rpg {
 
 Character::Character(const CharacterBlueprint& bp)
@@ -19,6 +21,18 @@ Character::Character(const CharacterBlueprint& bp)
       m_equipment {.weapon = bp.equippedWeapon, .armor = bp.equippedArmor},
       m_consumables {std::move(bp.consumables)}, m_weapons {std::move(bp.weapons)},
       m_armor {std::move(bp.armor)} {}
+
+void Character::addItem(Consumable consumable) {
+  m_consumables.add(std::move(consumable));
+}
+
+void Character::addItem(Weapon weapon) {
+  m_weapons.add(std::move(weapon));
+}
+
+void Character::addItem(Armor armor) {
+  m_armor.add(std::move(armor));
+}
 
 void Character::useConsumable(IdComponent consumableId) {
   if (!m_consumables.contains(consumableId)) return;
@@ -40,25 +54,21 @@ void Character::unequipArmor() {
 }
 
 void Character::equipWeapon(IdComponent weaponId) {
-  const auto it {m_weapons.find(weaponId)};
+  auto it {m_weapons.find(weaponId)};
   if (it == m_weapons.end()) return;
 
-  auto weapon {*it};
-  m_weapons.remove(weaponId);
-
+  m_weapons.remove(it);
   unequipWeapon();
-  m_equipment.weapon = std::move(weapon);
+  m_equipment.weapon = std::move(*it);
 }
 
 void Character::equipArmor(IdComponent armorId) {
-  const auto it {m_armor.find(armorId)};
+  auto it {m_armor.find(armorId)};
   if (it == m_armor.end()) return;
 
-  auto armor {*it};
-  m_armor.remove(armorId);
-
+  m_armor.remove(it);
   unequipArmor();
-  m_equipment.armor = std::move(armor);
+  m_equipment.armor = std::move(*it);
 }
 
 } // namespace Rpg

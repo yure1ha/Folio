@@ -40,6 +40,7 @@ public:
     if (delta <= 0) return;
 
     m_effective += delta;
+    m_current = m_effective;
     clamp();
   }
 
@@ -47,6 +48,7 @@ public:
     if (delta <= 0) return;
 
     m_effective -= delta;
+    m_current = m_effective;
     clamp();
   }
 
