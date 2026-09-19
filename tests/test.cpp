@@ -1,11 +1,11 @@
-namespace Rpg::Tests {
+namespace Folio::Tests {
 
 void runCombatTests();
 
-} // namespace Rpg::Tests
+} // namespace Folio::Tests
 
 int main() {
-  Rpg::Tests::runCombatTests();
+  Folio::Tests::runCombatTests();
 
   return 0;
 }

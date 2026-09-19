@@ -1,68 +1,72 @@
 cmake_minimum_required(VERSION 4.2)
-project(Rpg)
+project(Folio)
 
 set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_EXTENSIONS OFF)
 
-add_library(Rpg
+add_library(Folio
         # Components
-        include/Rpg/Components/ContainerComponent.h
-        include/Rpg/Components/DefenseComponent.h
-        include/Rpg/Components/EquipmentComponent.h
-        include/Rpg/Components/HealthComponent.h
-        include/Rpg/Components/IdComponent.h
-        include/Rpg/Components/StackComponent.h
-        include/Rpg/Components/StrengthComponent.h
+        include/Folio/Components/ContainerComponent.h
+        include/Folio/Components/DefenseComponent.h
+        include/Folio/Components/EquipmentComponent.h
+        include/Folio/Components/HealthComponent.h
+        include/Folio/Components/IdComponent.h
+        include/Folio/Components/StackComponent.h
+        include/Folio/Components/StrengthComponent.h
+        include/Folio/Components/ValueComponent.h
 
         # Concepts
-        include/Rpg/Concepts/AttributeComponent.h
-        include/Rpg/Concepts/ContainerItem.h
+        include/Folio/Concepts/AttributeComponent.h
+        include/Folio/Concepts/ContainerItem.h
 
         # Core
-        include/Rpg/Core/Types.h
+        include/Folio/Core/Types.h
 
         # Entities
-        include/Rpg/Entities/Character.h
-        include/Rpg/Entities/CharacterBlueprint.h
-        include/Rpg/Entities/Combatant.h
-        include/Rpg/Entities/Enemy.h
-        include/Rpg/Entities/EnemyBlueprint.h
-        include/Rpg/Entities/Entity.h
+        include/Folio/Entities/Character.h
+        include/Folio/Entities/CharacterBlueprint.h
+        include/Folio/Entities/Combatant.h
+        include/Folio/Entities/Enemy.h
+        include/Folio/Entities/EnemyBlueprint.h
+        include/Folio/Entities/Entity.h
         src/Entities/Character.cpp
         src/Entities/Combatant.cpp
         src/Entities/Enemy.cpp
 
         # Events
-        include/Rpg/Events/ApplyDamageEvent.h
-        include/Rpg/Events/ApplyInstantModifierEvent.h
-        include/Rpg/Events/ApplyStatusModifierEvent.h
-        include/Rpg/Events/RemoveStatusModifierEvent.h
+        include/Folio/Events/EApplyDamage.h
+        include/Folio/Events/EApplyInstantModifier.h
+        include/Folio/Events/EApplyStatusModifier.h
+        include/Folio/Events/ECharacterDefeated.h
+        include/Folio/Events/EEnemyDefeated.h
+        include/Folio/Events/EHealthChanged.h
+        include/Folio/Events/ERemoveStatusModifier.h
 
         # Factories
-        include/Rpg/Factories/EntityFactory.h
-        include/Rpg/Factories/IdFactory.h
+        include/Folio/Factories/EntityFactory.h
+        include/Folio/Factories/IdFactory.h
 
         # Items
-        include/Rpg/Items/Armor.h
-        include/Rpg/Items/Consumable.h
-        include/Rpg/Items/Weapon.h
+        include/Folio/Items/Armor.h
+        include/Folio/Items/Consumable.h
+        include/Folio/Items/Weapon.h
 
         # Modifiers
-        include/Rpg/Modifiers/InstantModifier.h
-        include/Rpg/Modifiers/InstantModifierType.h
-        include/Rpg/Modifiers/StatusModifier.h
-        include/Rpg/Modifiers/StatusModifierType.h
+        include/Folio/Modifiers/InstantModifier.h
+        include/Folio/Modifiers/InstantModifierType.h
+        include/Folio/Modifiers/StatusModifier.h
+        include/Folio/Modifiers/StatusModifierType.h
 
         # Systems
-        include/Rpg/Systems/CombatSystem.h
-        include/Rpg/Systems/EntityManager.h
-        include/Rpg/Systems/EventManager.h
-        include/Rpg/Systems/InventorySystem.h
-        include/Rpg/Systems/ModifierSystem.h
-        include/Rpg/Systems/SystemType.h
-        include/Rpg/Systems/TurnManager.h
-        include/Rpg/Systems/TurnSystem.h
+        include/Folio/Systems/CombatSystem.h
+        include/Folio/Systems/EntityManager.h
+        include/Folio/Systems/EventManager.h
+        include/Folio/Systems/InventorySystem.h
+        include/Folio/Systems/ModifierSystem.h
+        include/Folio/Systems/SystemType.h
+        include/Folio/Systems/TurnManager.h
+        include/Folio/Systems/TurnSystem.h
         src/Systems/CombatSystem.cpp
         src/Systems/EntityManager.cpp
         src/Systems/InventorySystem.cpp
@@ -71,15 +75,15 @@ add_library(Rpg
         src/Systems/TurnSystem.cpp
 )
 
-target_include_directories(Rpg PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/include)
+target_include_directories(Folio PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/include)
 
 add_executable(main main.cpp)
-target_link_libraries(main PRIVATE Rpg)
+target_link_libraries(main PRIVATE Folio)
 
 add_executable(test tests/test.cpp
         tests/Utilities.h
         tests/Utilities.cpp
         tests/CombatTest.cpp
 )
-target_link_libraries(test PRIVATE Rpg)
+target_link_libraries(test PRIVATE Folio)
 target_include_directories(test PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/tests)

@@ -10,7 +10,7 @@ ConstructorInitializerIndentWidth: 4
 AlignAfterOpenBracket: true
 AlwaysBreakTemplateDeclarations: Yes
 LambdaBodyIndentation: OuterScope
-AllowShortFunctionsOnASingleLine: Empty
+AllowShortFunctionsOnASingleLine: Inline
 AllowShortLambdasOnASingleLine: Empty
 AllowShortIfStatementsOnASingleLine: WithoutElse
 ReferenceAlignment: Left

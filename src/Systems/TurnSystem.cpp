@@ -1,6 +1,6 @@
-#include "Rpg/Systems/TurnSystem.h"
+#include "Folio/Systems/TurnSystem.h"
 
-namespace Rpg {
+namespace Folio {
 
 TurnSystem::TurnSystem(TurnManager& turnManager) : m_turnManager {turnManager} {}
 
@@ -13,4 +13,4 @@ void TurnSystem::endTurn() {
   startTurn();
 }
 
-} // namespace Rpg
+} // namespace Folio

@@ -1,13 +1,13 @@
-#include "Rpg/Systems/TurnManager.h"
+#include "Folio/Systems/TurnManager.h"
 
-#include "Rpg/Entities/Combatant.h"
-#include "Rpg/Components/IdComponent.h"
+#include "Folio/Entities/Combatant.h"
+#include "Folio/Components/IdComponent.h"
 
 #include <algorithm>
 #include <utility>
 #include <vector>
 
-namespace Rpg {
+namespace Folio {
 
 void TurnManager::initialize(IdComponent playerId, TurnList participants) {
   m_playerId = playerId;
@@ -32,4 +32,4 @@ void TurnManager::advance() {
   m_currentTurn++;
 }
 
-} // namespace Rpg
+} // namespace Folio

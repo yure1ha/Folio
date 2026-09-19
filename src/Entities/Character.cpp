@@ -1,16 +1,17 @@
-#include "Rpg/Entities/Character.h"
+#include "Folio/Entities/Character.h"
 
-#include "Rpg/Components/DefenseComponent.h"
-#include "Rpg/Components/EquipmentComponent.h"
-#include "Rpg/Components/HealthComponent.h"
-#include "Rpg/Components/IdComponent.h"
-#include "Rpg/Components/StrengthComponent.h"
-#include "Rpg/Entities/CharacterBlueprint.h"
-#include "Rpg/Entities/Combatant.h"
+#include "Folio/Components/DefenseComponent.h"
+#include "Folio/Components/EquipmentComponent.h"
+#include "Folio/Components/HealthComponent.h"
+#include "Folio/Components/IdComponent.h"
+#include "Folio/Components/StrengthComponent.h"
+#include "Folio/Core/Types.h"
+#include "Folio/Entities/CharacterBlueprint.h"
+#include "Folio/Entities/Combatant.h"
 
 #include <utility>
 
-namespace Rpg {
+namespace Folio {
 
 Character::Character(const CharacterBlueprint& bp)
     : Combatant {IdComponent {.typeId = bp.typeId},
@@ -18,9 +19,31 @@ Character::Character(const CharacterBlueprint& bp)
                  StrengthComponent {bp.baseStrength, bp.effectiveStrength},
                  DefenseComponent {bp.baseDefense, bp.effectiveDefense},
                  ModifierList {bp.modifiers}},
+      m_currentExp {bp.currentExp},
       m_equipment {.weapon = bp.equippedWeapon, .armor = bp.equippedArmor},
       m_consumables {std::move(bp.consumables)}, m_weapons {std::move(bp.weapons)},
       m_armor {std::move(bp.armor)} {}
+
+void Character::levelUp() {
+  m_level++;
+}
+
+void Character::gainExp(Experience exp) {
+  m_currentExp += exp;
+
+  while (levelable() && m_currentExp >= totalRequiredExp()) {
+    m_currentExp -= totalRequiredExp();
+    levelUp();
+  }
+}
+
+Experience Character::totalRequiredExp() const {
+  return (kQuadraticMultiplier * m_level * m_level) + (kLinearMultiplier * m_level) + kBaseValue;
+}
+
+Experience Character::requiredExp() const {
+  return totalRequiredExp() - m_currentExp;
+}
 
 void Character::addItem(Consumable consumable) {
   m_consumables.add(std::move(consumable));
@@ -71,4 +94,4 @@ void Character::equipArmor(IdComponent armorId) {
   m_equipment.armor = std::move(*it);
 }
 
-} // namespace Rpg
+} // namespace Folio

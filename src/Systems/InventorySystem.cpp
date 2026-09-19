@@ -1,15 +1,15 @@
-#include "Rpg/Systems/InventorySystem.h"
+#include "Folio/Systems/InventorySystem.h"
 
-#include "Rpg/Components/ContainerComponent.h"
-#include "Rpg/Components/EquipmentComponent.h"
-#include "Rpg/Components/IdComponent.h"
-#include "Rpg/Entities/Character.h"
-#include "Rpg/Items/Armor.h"
-#include "Rpg/Items/Consumable.h"
-#include "Rpg/Items/Weapon.h"
-#include "Rpg/Systems/ModifierSystem.h"
+#include "Folio/Components/ContainerComponent.h"
+#include "Folio/Components/EquipmentComponent.h"
+#include "Folio/Components/IdComponent.h"
+#include "Folio/Entities/Character.h"
+#include "Folio/Items/Armor.h"
+#include "Folio/Items/Consumable.h"
+#include "Folio/Items/Weapon.h"
+#include "Folio/Systems/ModifierSystem.h"
 
-namespace Rpg {
+namespace Folio {
 
 InventorySystem::InventorySystem(EntityManager& entityManager, ModifierSystem& modifierSystem)
     : m_entityManager {entityManager}, m_modifierSystem {modifierSystem} {}
@@ -82,4 +82,4 @@ void InventorySystem::equipArmor(IdComponent armorId, IdComponent targetId) cons
   }
 }
 
-} // namespace Rpg
+} // namespace Folio

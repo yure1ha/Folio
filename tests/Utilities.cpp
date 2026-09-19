@@ -1,6 +1,6 @@
 #include "Utilities.h"
 
-#include "Rpg/Entities/Combatant.h"
+#include "Folio/Entities/Combatant.h"
 
 #include <algorithm>
 #include <format>
@@ -8,7 +8,7 @@
 #include <string>
 #include <string_view>
 
-namespace Rpg::Tests {
+namespace Folio::Tests {
 
 constexpr std::string_view kReset = "\033[0m";
 constexpr std::string_view kGreen = "\033[32m";
@@ -48,4 +48,4 @@ void printCombatant(const Combatant& combatant) {
             << "\n\n";
 }
 
-} // namespace Rpg::Tests
+} // namespace Folio::Tests

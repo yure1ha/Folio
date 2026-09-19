@@ -1,27 +1,27 @@
-#include "Rpg/Components/StackComponent.h"
-#include "Rpg/Entities/Character.h"
-#include "Rpg/Entities/Enemy.h"
-#include "Rpg/Events/ApplyDamageEvent.h"
-#include "Rpg/Events/ApplyInstantModifierEvent.h"
-#include "Rpg/Events/ApplyStatusModifierEvent.h"
-#include "Rpg/Events/RemoveStatusModifierEvent.h"
-#include "Rpg/Factories/EntityFactory.h"
-#include "Rpg/Factories/IdFactory.h"
-#include "Rpg/Items/Armor.h"
-#include "Rpg/Items/Consumable.h"
-#include "Rpg/Items/Weapon.h"
-#include "Rpg/Modifiers/InstantModifier.h"
-#include "Rpg/Modifiers/InstantModifierType.h"
-#include "Rpg/Modifiers/StatusModifier.h"
-#include "Rpg/Modifiers/StatusModifierType.h"
-#include "Rpg/Systems/CombatSystem.h"
-#include "Rpg/Systems/EntityManager.h"
-#include "Rpg/Systems/EventManager.h"
-#include "Rpg/Systems/InventorySystem.h"
-#include "Rpg/Systems/ModifierSystem.h"
+#include "Folio/Components/StackComponent.h"
+#include "Folio/Entities/Character.h"
+#include "Folio/Entities/Enemy.h"
+#include "Folio/Events/EApplyDamage.h"
+#include "Folio/Events/EApplyInstantModifier.h"
+#include "Folio/Events/EApplyStatusModifier.h"
+#include "Folio/Events/ERemoveStatusModifier.h"
+#include "Folio/Factories/EntityFactory.h"
+#include "Folio/Factories/IdFactory.h"
+#include "Folio/Items/Armor.h"
+#include "Folio/Items/Consumable.h"
+#include "Folio/Items/Weapon.h"
+#include "Folio/Modifiers/InstantModifier.h"
+#include "Folio/Modifiers/InstantModifierType.h"
+#include "Folio/Modifiers/StatusModifier.h"
+#include "Folio/Modifiers/StatusModifierType.h"
+#include "Folio/Systems/CombatSystem.h"
+#include "Folio/Systems/EntityManager.h"
+#include "Folio/Systems/EventManager.h"
+#include "Folio/Systems/InventorySystem.h"
+#include "Folio/Systems/ModifierSystem.h"
 #include "Utilities.h"
 
-namespace Rpg::Tests {
+namespace Folio::Tests {
 
 void runCombatTests() {
   IdFactory idFactory;
@@ -119,10 +119,10 @@ void runCombatTests() {
 
   // Initialize Systems
   EntityManager entityManager {idFactory};
-  ApplyStatusModifierEventManager applyStatusModifierManager;
-  RemoveStatusModifierEventManager removeStatusModifierManager;
-  ApplyInstantModifierEventManager applyInstantModifierManager;
-  ApplyDamageEventManager damageManager;
+  EApplyStatusModifierManager applyStatusModifierManager;
+  ERemoveStatusModifierManager removeStatusModifierManager;
+  EApplyInstantModifierManager applyInstantModifierManager;
+  EApplyDamageManager damageManager;
   ModifierSystem modifierSystem {entityManager, applyStatusModifierManager,
                                  removeStatusModifierManager, applyInstantModifierManager};
   CombatSystem combatSystem {entityManager, damageManager};
@@ -211,4 +211,4 @@ void runCombatTests() {
   printCombatant(antagonist);
 }
 
-} // namespace Rpg::Tests
+} // namespace Folio::Tests

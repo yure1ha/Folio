@@ -1,17 +1,17 @@
-#include "Rpg/Entities/Combatant.h"
+#include "Folio/Entities/Combatant.h"
 
-#include "Rpg/Components/ContainerComponent.h"
-#include "Rpg/Components/DefenseComponent.h"
-#include "Rpg/Components/HealthComponent.h"
-#include "Rpg/Components/IdComponent.h"
-#include "Rpg/Components/StrengthComponent.h"
-#include "Rpg/Entities/Entity.h"
-#include "Rpg/Modifiers/InstantModifierType.h"
-#include "Rpg/Modifiers/StatusModifier.h"
+#include "Folio/Components/ContainerComponent.h"
+#include "Folio/Components/DefenseComponent.h"
+#include "Folio/Components/HealthComponent.h"
+#include "Folio/Components/IdComponent.h"
+#include "Folio/Components/StrengthComponent.h"
+#include "Folio/Entities/Entity.h"
+#include "Folio/Modifiers/InstantModifierType.h"
+#include "Folio/Modifiers/StatusModifier.h"
 
 #include <utility>
 
-namespace Rpg {
+namespace Folio {
 
 Combatant::Combatant(IdComponent id, HealthComponent health, StrengthComponent strength,
                      DefenseComponent defense, ModifierList modifiers)
@@ -55,4 +55,4 @@ void Combatant::refreshStatusModifiers() {
   }
 }
 
-} // namespace Rpg
+} // namespace Folio
