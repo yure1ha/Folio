@@ -5,6 +5,7 @@
 #include "Folio/Components/HealthComponent.h"
 #include "Folio/Components/IdComponent.h"
 #include "Folio/Components/StrengthComponent.h"
+#include "Folio/Components/ValueComponent.h"
 #include "Folio/Concepts/AttributeComponent.h"
 #include "Folio/Entities/Entity.h"
 #include "Folio/Modifiers/InstantModifier.h"
@@ -16,9 +17,10 @@ class Combatant : public Entity {
 public:
   using ModifierList = ContainerComponent<StatusModifier>;
 
-  Combatant(IdComponent id, HealthComponent health, StrengthComponent strength,
+  Combatant(IdComponent id, ValueComponent exp, HealthComponent health, StrengthComponent strength,
             DefenseComponent defense, ModifierList modifiers);
 
+  ValueComponent exp() const { return m_exp; }
   HealthComponent health() const { return m_health; }
   StrengthComponent strength() const { return m_strength; }
   DefenseComponent defense() const { return m_defense; }
@@ -27,6 +29,9 @@ public:
   void heal(Health delta) { m_health.heal(delta); }
   void takeDamage(Health delta) { m_health.takeDamage(delta); }
   void healFull() { m_health.healFull(); }
+
+  void increaseExp(Experience delta);
+  void decreaseExp(Experience delta);
 
   void addStatusModifier(const StatusModifier& modifier);
   void removeStatusModifier(IdComponent modifierId);
@@ -46,6 +51,7 @@ private:
 
   void refreshStatusModifiers();
 
+  ValueComponent m_exp;
   HealthComponent m_health;
   StrengthComponent m_strength;
   DefenseComponent m_defense;

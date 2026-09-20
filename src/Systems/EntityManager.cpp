@@ -3,12 +3,13 @@
 #include "Folio/Components/IdComponent.h"
 #include "Folio/Entities/Character.h"
 #include "Folio/Entities/Combatant.h"
-#include "Folio/Entities/Enemy.h"
 #include "Folio/Entities/Entity.h"
+#include "Folio/Entities/EntityType.h"
 #include "Folio/Events/ECharacterDefeated.h"
 #include "Folio/Events/EEnemyDefeated.h"
 #include "Folio/Events/EHealthChanged.h"
 
+#include <algorithm>
 #include <utility>
 
 namespace Folio {
@@ -50,29 +51,44 @@ void EntityManager::destroy(IdComponent id) {
   m_idFactory.free(id.instanceId);
 }
 
+void EntityManager::clearDestructionQueue() {
+  for (const auto& id : m_destructionQueue) {
+    destroy(id);
+  }
+
+  m_destructionQueue.clear();
+}
+
 void EntityManager::onHealthChanged(const EHealthChanged& event) {
-  auto target {find<Combatant>(event.targetId)};
+  const auto target {find<Combatant>(event.targetId)};
   if (!target || target->health().alive()) return;
 
-  if (const auto enemy {dynamic_cast<Enemy*>(target)}) {
-    m_enemyDefeatedManager.dispatch(EEnemyDefeated {
-        .sourceId = event.sourceId, .targetId = event.targetId, .exp = enemy->exp().total()});
-  } else {
+  switch (target->type()) {
+  case EntityType::None:
+    break;
+
+  case EntityType::Character:
     m_characterDefeatedManager.dispatch(
         ECharacterDefeated {.sourceId = event.sourceId, .targetId = event.targetId});
+    break;
+
+  case EntityType::Enemy:
+    m_enemyDefeatedManager.dispatch(EEnemyDefeated {
+        .sourceId = event.sourceId, .targetId = event.targetId, .exp = target->exp().total()});
+    break;
   }
 }
 
-void EntityManager::onCharacterDefeated(const ECharacterDefeated& event) {
-  // TODO: handle character defeat
-}
+void EntityManager::onCharacterDefeated(const ECharacterDefeated& event) {}
 
 void EntityManager::onEnemyDefeated(const EEnemyDefeated& event) {
   if (auto source {find<Character>(event.sourceId)}) {
     source->gainExp(event.exp);
   }
 
-  destroy(event.targetId);
+  if (std::ranges::find(m_destructionQueue, event.targetId) == m_destructionQueue.end()) {
+    m_destructionQueue.push_back(event.targetId);
+  }
 }
 
 } // namespace Folio

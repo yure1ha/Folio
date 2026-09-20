@@ -30,6 +30,7 @@ add_library(Folio
         include/Folio/Entities/Enemy.h
         include/Folio/Entities/EnemyBlueprint.h
         include/Folio/Entities/Entity.h
+        include/Folio/Entities/EntityType.h
         src/Entities/Character.cpp
         src/Entities/Combatant.cpp
         src/Entities/Enemy.cpp

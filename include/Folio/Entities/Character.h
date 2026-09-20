@@ -8,6 +8,7 @@
 #include "Folio/Items/Armor.h"
 #include "Folio/Items/Consumable.h"
 #include "Folio/Items/Weapon.h"
+#include "Folio/Entities/EntityType.h"
 
 #include <cstdint>
 
@@ -21,8 +22,9 @@ public:
 
   explicit Character(const CharacterBlueprint& bp);
 
+  EntityType type() const override { return EntityType::Character; }
+
   Level level() const { return m_level; }
-  Experience currentExp() const { return m_currentExp; }
   bool levelable() const { return m_level < kMaxLevel; }
 
   const EquipmentComponent& equipment() const { return m_equipment; }
@@ -31,7 +33,7 @@ public:
   const ArmorInventory& armor() const { return m_armor; }
 
   void levelUp();
-  void gainExp(Experience exp);
+  void gainExp(Experience delta);
   Experience totalRequiredExp() const;
   Experience requiredExp() const;
 
@@ -54,7 +56,6 @@ private:
   static constexpr std::int32_t kBaseValue {100};
 
   Level m_level {};
-  Experience m_currentExp {};
 
   EquipmentComponent m_equipment;
   ConsumableInventory m_consumables;

@@ -46,7 +46,7 @@ public:
   }
 
   void takeDamage(Health delta) {
-    if (delta <= 0) return;
+    if (delta <= 0 || !alive()) return;
 
     m_current -= delta;
     clamp();

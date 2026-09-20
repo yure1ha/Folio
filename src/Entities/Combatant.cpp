@@ -13,10 +13,18 @@
 
 namespace Folio {
 
-Combatant::Combatant(IdComponent id, HealthComponent health, StrengthComponent strength,
-                     DefenseComponent defense, ModifierList modifiers)
-    : Entity {id}, m_health {health}, m_strength {strength}, m_defense {defense},
+Combatant::Combatant(IdComponent id, ValueComponent exp, HealthComponent health,
+                     StrengthComponent strength, DefenseComponent defense, ModifierList modifiers)
+    : Entity {id}, m_exp {exp}, m_health {health}, m_strength {strength}, m_defense {defense},
       m_modifiers {std::move(modifiers)} {}
+
+void Combatant::increaseExp(Experience delta) {
+  m_exp.base += delta;
+}
+
+void Combatant::decreaseExp(Experience delta) {
+  m_exp.base -= delta;
+}
 
 void Combatant::addStatusModifier(const StatusModifier& modifier) {
   m_modifiers.add(modifier);

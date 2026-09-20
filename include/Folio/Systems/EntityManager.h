@@ -12,6 +12,7 @@
 #include <memory>
 #include <unordered_map>
 #include <utility>
+#include <vector>
 
 namespace Folio {
 
@@ -47,6 +48,7 @@ public:
 
   void add(EntityUPtr entity);
   void destroy(IdComponent id);
+  void clearDestructionQueue();
 
 private:
   void onHealthChanged(const EHealthChanged& event);
@@ -57,7 +59,9 @@ private:
   EHealthChangedManager& m_healthChangedManager;
   ECharacterDefeatedManager& m_characterDefeatedManager;
   EEnemyDefeatedManager& m_enemyDefeatedManager;
+
   std::unordered_map<InstanceId, EntityUPtr> m_entities {};
+  std::vector<IdComponent> m_destructionQueue {};
 };
 
 } // namespace Folio

@@ -14,10 +14,10 @@ namespace Folio {
 
 Enemy::Enemy(EnemyBlueprint bp)
     : Combatant {IdComponent {.typeId = bp.typeId},
+                 ValueComponent {.base = bp.baseExp},
                  HealthComponent {bp.baseHealth, bp.effectiveHealth, bp.currentHealth},
                  StrengthComponent {bp.baseStrength, bp.effectiveStrength},
                  DefenseComponent {bp.baseDefense, bp.effectiveDefense},
-                 ModifierList {std::move(bp.modifiers)}},
-      m_exp {.base = bp.baseExp} {}
+                 ModifierList {std::move(bp.modifiers)}} {}
 
 } // namespace Folio

@@ -41,6 +41,8 @@ void CombatSystem::applyDamage(IdComponent sourceId, IdComponent targetId) const
   auto source {m_entityManager.find<Combatant>(sourceId)};
   auto target {m_entityManager.find<Combatant>(targetId)};
 
+  if (!source || !target || !source->health().alive() || !target->health().alive()) return;
+
   const auto damage {calculateDamage(source->strength(), target->defense())};
   target->takeDamage(damage);
 

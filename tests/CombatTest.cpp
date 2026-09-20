@@ -4,6 +4,9 @@
 #include "Folio/Events/EApplyDamage.h"
 #include "Folio/Events/EApplyInstantModifier.h"
 #include "Folio/Events/EApplyStatusModifier.h"
+#include "Folio/Events/ECharacterDefeated.h"
+#include "Folio/Events/EEnemyDefeated.h"
+#include "Folio/Events/EHealthChanged.h"
 #include "Folio/Events/ERemoveStatusModifier.h"
 #include "Folio/Factories/EntityFactory.h"
 #include "Folio/Factories/IdFactory.h"
@@ -30,32 +33,32 @@ void runCombatTests() {
   StatusModifier healthUp {.id = {.typeId = 1000, .instanceId = idFactory.allocate()},
                            .type = StatusModifierType::Health,
                            .stack = {StackComponent {99, 1}},
-                           .value = 10};
+                           .value = {.base = 10}};
 
   StatusModifier healthDown {.id = {.typeId = 1001, .instanceId = idFactory.allocate()},
                              .type = StatusModifierType::Health,
                              .stack = {StackComponent {99, 1}},
-                             .value = -10};
+                             .value = {.base = -10}};
 
   StatusModifier strengthUp {.id = {.typeId = 1002, .instanceId = idFactory.allocate()},
                              .type = StatusModifierType::Strength,
                              .stack = {StackComponent {99, 1}},
-                             .value = 5};
+                             .value = {.base = 5}};
 
   StatusModifier strengthDown {.id = {.typeId = 1003, .instanceId = idFactory.allocate()},
                                .type = StatusModifierType::Strength,
                                .stack = {StackComponent {99, 1}},
-                               .value = -5};
+                               .value = {.base = -5}};
 
   StatusModifier defenseUp {.id = {.typeId = 1004, .instanceId = idFactory.allocate()},
                             .type = StatusModifierType::Defense,
                             .stack = {StackComponent {99, 1}},
-                            .value = 5};
+                            .value = {.base = 5}};
 
   StatusModifier defenseDown {.id = {.typeId = 1005, .instanceId = idFactory.allocate()},
                               .type = StatusModifierType::Defense,
                               .stack = {StackComponent {99, 1}},
-                              .value = -5};
+                              .value = {.base = -5}};
 
   InstantModifier heal {
       .id = {.typeId = 1006, .instanceId = idFactory.allocate()},
@@ -108,9 +111,9 @@ void runCombatTests() {
 
   EnemyBlueprint antagonistBp {
       .typeId = 2,
-      .baseHealth = 100,
-      .effectiveHealth = 100,
-      .currentHealth = 100,
+      .baseHealth = 300,
+      .effectiveHealth = 300,
+      .currentHealth = 300,
       .baseStrength = 30,
       .effectiveStrength = 30,
       .baseDefense = 20,
@@ -118,14 +121,21 @@ void runCombatTests() {
   };
 
   // Initialize Systems
-  EntityManager entityManager {idFactory};
   EApplyStatusModifierManager applyStatusModifierManager;
   ERemoveStatusModifierManager removeStatusModifierManager;
   EApplyInstantModifierManager applyInstantModifierManager;
   EApplyDamageManager damageManager;
+  EHealthChangedManager healthChangedManager;
+  ECharacterDefeatedManager characterDefeatedManager;
+  EEnemyDefeatedManager enemyDefeatedManager;
+
+  EntityManager entityManager {idFactory, healthChangedManager, characterDefeatedManager,
+                               enemyDefeatedManager};
   ModifierSystem modifierSystem {entityManager, applyStatusModifierManager,
-                                 removeStatusModifierManager, applyInstantModifierManager};
-  CombatSystem combatSystem {entityManager, damageManager};
+                                 removeStatusModifierManager, applyInstantModifierManager,
+                                 healthChangedManager};
+  CombatSystem combatSystem {entityManager, damageManager, healthChangedManager,
+                             characterDefeatedManager, enemyDefeatedManager};
   InventorySystem inventorySystem {entityManager, modifierSystem};
 
   // Initialize Entities
@@ -205,10 +215,15 @@ void runCombatTests() {
 
   // Phase 10
   inventorySystem.useConsumable(shuriken.id, protagonistId, antagonistId);
-  combatSystem.applyDamage(protagonistId, antagonistId);
-  combatSystem.applyDamage(antagonistId, protagonistId);
+
+  while (antagonist.health().alive()) {
+    combatSystem.applyDamage(protagonistId, antagonistId);
+  }
+
   printCombatant(protagonist);
   printCombatant(antagonist);
+
+  entityManager.clearDestructionQueue();
 }
 
 } // namespace Folio::Tests

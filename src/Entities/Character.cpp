@@ -5,6 +5,7 @@
 #include "Folio/Components/HealthComponent.h"
 #include "Folio/Components/IdComponent.h"
 #include "Folio/Components/StrengthComponent.h"
+#include "Folio/Components/ValueComponent.h"
 #include "Folio/Core/Types.h"
 #include "Folio/Entities/CharacterBlueprint.h"
 #include "Folio/Entities/Combatant.h"
@@ -15,11 +16,11 @@ namespace Folio {
 
 Character::Character(const CharacterBlueprint& bp)
     : Combatant {IdComponent {.typeId = bp.typeId},
+                 ValueComponent {.base = bp.currentExp},
                  HealthComponent {bp.baseHealth, bp.effectiveHealth, bp.currentHealth},
                  StrengthComponent {bp.baseStrength, bp.effectiveStrength},
                  DefenseComponent {bp.baseDefense, bp.effectiveDefense},
                  ModifierList {bp.modifiers}},
-      m_currentExp {bp.currentExp},
       m_equipment {.weapon = bp.equippedWeapon, .armor = bp.equippedArmor},
       m_consumables {std::move(bp.consumables)}, m_weapons {std::move(bp.weapons)},
       m_armor {std::move(bp.armor)} {}
@@ -28,11 +29,11 @@ void Character::levelUp() {
   m_level++;
 }
 
-void Character::gainExp(Experience exp) {
-  m_currentExp += exp;
+void Character::gainExp(Experience delta) {
+  increaseExp(delta);
 
-  while (levelable() && m_currentExp >= totalRequiredExp()) {
-    m_currentExp -= totalRequiredExp();
+  while (levelable() && exp().base >= totalRequiredExp()) {
+    decreaseExp(totalRequiredExp());
     levelUp();
   }
 }
@@ -42,7 +43,7 @@ Experience Character::totalRequiredExp() const {
 }
 
 Experience Character::requiredExp() const {
-  return totalRequiredExp() - m_currentExp;
+  return totalRequiredExp() - exp().base;
 }
 
 void Character::addItem(Consumable consumable) {
