@@ -1,7 +1,7 @@
 # Folio
 
-A C++ video game gameplay framework. Currently working on an experience system and turn-based combat manager, as time
-allows.
+A C++ video game gameplay framework. Currently working on a character experience and turn-based combat system,
+as time allows.
 
 ## Structure
 
@@ -44,10 +44,11 @@ void CombatSystem::applyDamage(IdComponent sourceId, IdComponent targetId) const
 ```
 
 Additionally, factories create game object instances and systems facilitate the communication between game
-objects. The `EntityManager` manages the lifetime of active entities, and the `EventManager` calls the logic of multiple
-systems whenever an event fires. For instance, equipping a weapon might dispatch an `EApplyStatusModifier` event,
-which coordinates the relevant systems to apply the modifier internally, adjust the UI accordingly, or play the appropriate
-audio and animation (though currently, only logic for applying the modifier internally has been implemented).
+objects. The `EntityManager` manages the lifetime of active entities, and the `EventManager` calls multiple systems
+whenever an event fires. For instance, equipping a weapon might dispatch an `EApplyStatusModifier` event, which
+coordinates the relevant systems to apply the modifier internally, adjust the UI accordingly, or play the appropriate
+audio and animation (though currently, only logic for applying the modifier internally has been implemented). Systems
+automatically subscribe to event managers upon construction and unsubscribe upon destruction.
 
 ### Example Usage
 
