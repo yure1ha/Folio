@@ -21,15 +21,10 @@ public:
   explicit ContainerComponent(std::vector<T> items) : m_items {std::move(items)} {}
 
   const std::vector<T>& items() const { return m_items; }
-
   auto begin() { return m_items.begin(); }
-
   auto end() { return m_items.end(); }
-
   auto begin() const { return m_items.begin(); }
-
   auto end() const { return m_items.end(); }
-
   bool contains(IdComponent id) const { return find(id) != end(); }
 
   ConstIterator find(IdComponent id) const {
