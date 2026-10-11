@@ -79,7 +79,9 @@ void EntityManager::onHealthChanged(const EHealthChanged& event) {
   }
 }
 
-void EntityManager::onCharacterDefeated(const ECharacterDefeated& event) {}
+void EntityManager::onCharacterDefeated(const ECharacterDefeated& event) {
+  auto target {find<Character>(event.targetId)};
+}
 
 void EntityManager::onEnemyDefeated(const EEnemyDefeated& event) {
   if (auto source {find<Character>(event.sourceId)}) {

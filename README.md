@@ -23,18 +23,21 @@ void heal(Health delta) { ... }
 static constexpr Strength kMaxStrength {99};
 ```
 
-The project uses a hybrid inheritance and component-based design for game objects, the former to enable
+The project uses a hybrid inheritance and component-based design for game objects, the former to support
 polymorphism and reduce repetition in the members of some objects, and the latter for flexibility and reusability
-across various different objects. All game objects are identified by a type ID and a unique instance ID. Using
+across various different objects. All game objects are identified by a type ID and a globally unique instance ID. Using
 inheritance for certain objects has the added benefit of greater intuitiveness at the call site:
 
 ```c++
 // src/Systems/CombatSystem.cpp
 void CombatSystem::applyDamage(IdComponent sourceId, IdComponent targetId) const {
   auto source {m_entityManager.find<Combatant>(sourceId)};
+  if (!source) return;
+  
   auto target {m_entityManager.find<Combatant>(targetId)};
+  if (!target) return;
 
-  if (!source || !target || !source->health().alive() || !target->health().alive()) return;
+  if (!source->health().alive() || !target->health().alive()) return;
 
   const auto damage {calculateDamage(source->strength(), target->defense())};
   target->takeDamage(damage);
@@ -45,10 +48,25 @@ void CombatSystem::applyDamage(IdComponent sourceId, IdComponent targetId) const
 
 Additionally, factories create game object instances and systems facilitate the communication between game
 objects. The `EntityManager` manages the lifetime of active entities, and the `EventManager` calls multiple systems
-whenever an event fires. For instance, equipping a weapon might dispatch an `EApplyStatusModifier` event, which
+whenever an event fires. For instance, equipping armor might dispatch an `EApplyStatusModifier` event, which
 coordinates the relevant systems to apply the modifier internally, adjust the UI accordingly, or play the appropriate
-audio and animation (though currently, only logic for applying the modifier internally has been implemented). Systems
-automatically subscribe to event managers upon construction and unsubscribe upon destruction.
+audio and animation, though currently, only logic for applying the modifier internally has been implemented.
+
+Systems automatically subscribe to event managers upon construction and unsubscribe upon destruction. The
+`EntityManager` defers entity destruction to a queue to prevent dangling references. The `EventManager` is defined as a
+class template so that each event receives its own event manager, eliminating the need for inheritance and downcasting
+using a base `Event` class, as event types are not complex:
+
+```c++
+// include/Folio/Events/EHealthChanged.h
+struct EHealthChanged {
+  IdComponent sourceId;
+  IdComponent targetId;
+};
+```
+
+However, this does lead to increased verbosity, as each system must hold references to multiple event managers, and I am
+considering alternative designs for the future.
 
 ### Example Usage
 

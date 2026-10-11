@@ -19,13 +19,14 @@ public:
     SystemCallback callback {};
   };
 
-  void subscribe(SystemType systemType, SystemCallback callback) {
-    const auto isSubscribed {
-        std::ranges::any_of(m_subscribers, [systemType](const Subscriber& subscriber) {
+  bool subscribed(SystemType systemType) {
+    return std::ranges::any_of(m_subscribers, [systemType](const Subscriber& subscriber) {
       return systemType == subscriber.type;
-    })};
+    });
+  }
 
-    if (isSubscribed) return;
+  void subscribe(SystemType systemType, SystemCallback callback) {
+    if (!callback || subscribed(systemType)) return;
     m_subscribers.push_back(Subscriber {.type = systemType, .callback = std::move(callback)});
   }
 

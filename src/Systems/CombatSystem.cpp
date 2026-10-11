@@ -37,9 +37,12 @@ Damage CombatSystem::calculateDamage(StrengthComponent str, DefenseComponent def
 
 void CombatSystem::applyDamage(IdComponent sourceId, IdComponent targetId) const {
   auto source {m_entityManager.find<Combatant>(sourceId)};
-  auto target {m_entityManager.find<Combatant>(targetId)};
+  if (!source) return;
 
-  if (!source || !target || !source->health().alive() || !target->health().alive()) return;
+  auto target {m_entityManager.find<Combatant>(targetId)};
+  if (!target) return;
+
+  if (!source->health().alive() || !target->health().alive()) return;
 
   const auto damage {calculateDamage(source->strength(), target->defense())};
   target->takeDamage(damage);

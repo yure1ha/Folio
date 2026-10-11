@@ -22,7 +22,7 @@ void InventorySystem::useConsumable(IdComponent consumableId, IdComponent source
   auto target {m_entityManager.find<Combatant>(targetId)};
   if (!target) return;
 
-  const auto consumable {source->consumables().find(consumableId)};
+  auto consumable {source->consumables().find(consumableId)};
   if (consumable == source->consumables().end()) return;
 
   if (consumable->hasStatusModifier()) {
@@ -41,7 +41,9 @@ void InventorySystem::unequipWeapon(IdComponent targetId) const {
   if (!target) return;
 
   const auto previous {target->equipment().weapon};
-  target->unequipWeapon();
+  if (!previous.has_value()) return;
+
+  if (!target->unequipWeapon()) return;
 
   if (previous->hasStatusModifier()) {
     m_modifierSystem.removeStatusModifier(previous->id, target->id());
@@ -53,7 +55,9 @@ void InventorySystem::unequipArmor(IdComponent targetId) const {
   if (!target) return;
 
   const auto previous {target->equipment().armor};
-  target->unequipArmor();
+  if (!previous.has_value()) return;
+
+  if (!target->unequipArmor()) return;
 
   if (previous->hasStatusModifier()) {
     m_modifierSystem.removeStatusModifier(previous->id, target->id());
@@ -64,7 +68,7 @@ void InventorySystem::equipWeapon(IdComponent weaponId, IdComponent targetId) co
   auto target {m_entityManager.find<Character>(targetId)};
   if (!target) return;
 
-  target->equipWeapon(weaponId);
+  if (!target->equipWeapon(weaponId)) return;
 
   if (target->equipment().weapon->hasStatusModifier()) {
     m_modifierSystem.addStatusModifier(target->equipment().weapon->modifier, targetId, targetId);
@@ -75,7 +79,7 @@ void InventorySystem::equipArmor(IdComponent armorId, IdComponent targetId) cons
   auto target {m_entityManager.find<Character>(targetId)};
   if (!target) return;
 
-  target->equipArmor(armorId);
+  if (!target->equipArmor(armorId)) return;
 
   if (target->equipment().armor->hasStatusModifier()) {
     m_modifierSystem.addStatusModifier(target->equipment().armor->modifier, targetId, targetId);

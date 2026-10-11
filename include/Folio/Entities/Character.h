@@ -42,10 +42,10 @@ public:
   void addItem(Armor armor);
 
   void useConsumable(IdComponent consumableId);
-  void unequipWeapon();
-  void unequipArmor();
-  void equipWeapon(IdComponent weaponId);
-  void equipArmor(IdComponent armorId);
+  bool unequipWeapon();
+  bool unequipArmor();
+  bool equipWeapon(IdComponent weaponId);
+  bool equipArmor(IdComponent armorId);
 
 private:
   static constexpr Level kMinLevel {1};

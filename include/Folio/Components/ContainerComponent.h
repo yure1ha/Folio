@@ -20,11 +20,12 @@ public:
 
   explicit ContainerComponent(std::vector<T> items) : m_items {std::move(items)} {}
 
-  const std::vector<T>& items() const { return m_items; }
   auto begin() { return m_items.begin(); }
   auto end() { return m_items.end(); }
   auto begin() const { return m_items.begin(); }
   auto end() const { return m_items.end(); }
+
+  const std::vector<T>& items() const { return m_items; }
   bool contains(IdComponent id) const { return find(id) != end(); }
 
   ConstIterator find(IdComponent id) const {
@@ -48,8 +49,6 @@ public:
     m_items.push_back(std::move(item));
   }
 
-  void remove(IdComponent id, Stack delta = 1) { remove(find(id), delta); }
-
   void remove(Iterator it, Stack delta = 1) {
     if (it == end()) return;
 
@@ -58,6 +57,8 @@ public:
       m_items.erase(it);
     }
   }
+
+  void remove(IdComponent id, Stack delta = 1) { remove(find(id), delta); }
 
   void sort() {
     std::ranges::sort(m_items, [](const T& a, const T& b) {

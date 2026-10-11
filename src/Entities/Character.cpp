@@ -63,36 +63,48 @@ void Character::useConsumable(IdComponent consumableId) {
   m_consumables.remove(consumableId);
 }
 
-void Character::unequipWeapon() {
-  if (!m_equipment.weapon.has_value()) return;
+bool Character::unequipWeapon() {
+  if (!m_equipment.weapon.has_value()) return false;
 
   m_weapons.add(std::move(*m_equipment.weapon));
   m_equipment.weapon.reset();
+
+  return true;
 }
 
-void Character::unequipArmor() {
-  if (!m_equipment.armor.has_value()) return;
+bool Character::unequipArmor() {
+  if (!m_equipment.armor.has_value()) return false;
 
   m_armor.add(std::move(*m_equipment.armor));
   m_equipment.armor.reset();
+
+  return true;
 }
 
-void Character::equipWeapon(IdComponent weaponId) {
+bool Character::equipWeapon(IdComponent weaponId) {
   auto it {m_weapons.find(weaponId)};
-  if (it == m_weapons.end()) return;
+  if (it == m_weapons.end()) return false;
 
+  auto weapon {std::move(*it)};
   m_weapons.remove(it);
+
   unequipWeapon();
-  m_equipment.weapon = std::move(*it);
+  m_equipment.weapon = std::move(weapon);
+
+  return true;
 }
 
-void Character::equipArmor(IdComponent armorId) {
+bool Character::equipArmor(IdComponent armorId) {
   auto it {m_armor.find(armorId)};
-  if (it == m_armor.end()) return;
+  if (it == m_armor.end()) return false;
 
+  auto armor {std::move(*it)};
   m_armor.remove(it);
+
   unequipArmor();
-  m_equipment.armor = std::move(*it);
+  m_equipment.armor = std::move(armor);
+
+  return true;
 }
 
 } // namespace Folio
