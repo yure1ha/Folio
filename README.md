@@ -1,7 +1,6 @@
 # Folio
 
-A C++ video game gameplay framework. Currently working on a character experience and turn-based combat system,
-as time allows.
+A C++ video game gameplay framework. Currently working on a character experience and turn-based combat system.
 
 ## Structure
 
