@@ -40,9 +40,8 @@ void InventorySystem::unequipWeapon(IdComponent targetId) const {
   auto target {m_entityManager.find<Character>(targetId)};
   if (!target) return;
 
-  const auto previous {target->equipment().weapon};
+  const auto previous {target->equipment().weapon()};
   if (!previous.has_value()) return;
-
   if (!target->unequipWeapon()) return;
 
   if (previous->hasStatusModifier()) {
@@ -54,9 +53,8 @@ void InventorySystem::unequipArmor(IdComponent targetId) const {
   auto target {m_entityManager.find<Character>(targetId)};
   if (!target) return;
 
-  const auto previous {target->equipment().armor};
+  const auto previous {target->equipment().armor()};
   if (!previous.has_value()) return;
-
   if (!target->unequipArmor()) return;
 
   if (previous->hasStatusModifier()) {
@@ -68,10 +66,11 @@ void InventorySystem::equipWeapon(IdComponent weaponId, IdComponent targetId) co
   auto target {m_entityManager.find<Character>(targetId)};
   if (!target) return;
 
+  unequipWeapon(targetId);
   if (!target->equipWeapon(weaponId)) return;
 
-  if (target->equipment().weapon->hasStatusModifier()) {
-    m_modifierSystem.addStatusModifier(target->equipment().weapon->modifier, targetId, targetId);
+  if (target->equipment().weapon()->hasStatusModifier()) {
+    m_modifierSystem.addStatusModifier(target->equipment().weapon()->modifier, targetId, targetId);
   }
 }
 
@@ -79,10 +78,11 @@ void InventorySystem::equipArmor(IdComponent armorId, IdComponent targetId) cons
   auto target {m_entityManager.find<Character>(targetId)};
   if (!target) return;
 
+  unequipArmor(targetId);
   if (!target->equipArmor(armorId)) return;
 
-  if (target->equipment().armor->hasStatusModifier()) {
-    m_modifierSystem.addStatusModifier(target->equipment().armor->modifier, targetId, targetId);
+  if (target->equipment().armor()->hasStatusModifier()) {
+    m_modifierSystem.addStatusModifier(target->equipment().armor()->modifier, targetId, targetId);
   }
 }
 

@@ -20,10 +20,9 @@ Character::Character(const CharacterBlueprint& bp)
                  HealthComponent {bp.baseHealth, bp.effectiveHealth, bp.currentHealth},
                  StrengthComponent {bp.baseStrength, bp.effectiveStrength},
                  DefenseComponent {bp.baseDefense, bp.effectiveDefense},
-                 ModifierList {bp.modifiers}},
-      m_equipment {.weapon = bp.equippedWeapon, .armor = bp.equippedArmor},
-      m_consumables {std::move(bp.consumables)}, m_weapons {std::move(bp.weapons)},
-      m_armor {std::move(bp.armor)} {}
+                 StatusModifierList {bp.modifiers}},
+      m_equipment {bp.equippedWeapon, bp.equippedArmor, std::move(bp.weapons), std::move(bp.armor)},
+      m_consumables {std::move(bp.consumables)} {}
 
 void Character::levelUp() {
   m_level++;
@@ -50,61 +49,9 @@ void Character::addItem(Consumable consumable) {
   m_consumables.add(std::move(consumable));
 }
 
-void Character::addItem(Weapon weapon) {
-  m_weapons.add(std::move(weapon));
-}
-
-void Character::addItem(Armor armor) {
-  m_armor.add(std::move(armor));
-}
-
 void Character::useConsumable(IdComponent consumableId) {
   if (!m_consumables.contains(consumableId)) return;
   m_consumables.remove(consumableId);
-}
-
-bool Character::unequipWeapon() {
-  if (!m_equipment.weapon.has_value()) return false;
-
-  m_weapons.add(std::move(*m_equipment.weapon));
-  m_equipment.weapon.reset();
-
-  return true;
-}
-
-bool Character::unequipArmor() {
-  if (!m_equipment.armor.has_value()) return false;
-
-  m_armor.add(std::move(*m_equipment.armor));
-  m_equipment.armor.reset();
-
-  return true;
-}
-
-bool Character::equipWeapon(IdComponent weaponId) {
-  auto it {m_weapons.find(weaponId)};
-  if (it == m_weapons.end()) return false;
-
-  auto weapon {std::move(*it)};
-  m_weapons.remove(it);
-
-  unequipWeapon();
-  m_equipment.weapon = std::move(weapon);
-
-  return true;
-}
-
-bool Character::equipArmor(IdComponent armorId) {
-  auto it {m_armor.find(armorId)};
-  if (it == m_armor.end()) return false;
-
-  auto armor {std::move(*it)};
-  m_armor.remove(it);
-
-  unequipArmor();
-  m_equipment.armor = std::move(armor);
-
-  return true;
 }
 
 } // namespace Folio

@@ -1,14 +1,15 @@
 #pragma once
 
 #include "Folio/Components/ContainerComponent.h"
+#include "Folio/Components/Containers.h"
 #include "Folio/Components/EquipmentComponent.h"
 #include "Folio/Core/Types.h"
 #include "Folio/Entities/CharacterBlueprint.h"
 #include "Folio/Entities/Combatant.h"
+#include "Folio/Entities/EntityType.h"
 #include "Folio/Items/Armor.h"
 #include "Folio/Items/Consumable.h"
 #include "Folio/Items/Weapon.h"
-#include "Folio/Entities/EntityType.h"
 
 #include <cstdint>
 
@@ -16,10 +17,6 @@ namespace Folio {
 
 class Character : public Combatant {
 public:
-  using ConsumableInventory = ContainerComponent<Consumable>;
-  using WeaponInventory = ContainerComponent<Weapon>;
-  using ArmorInventory = ContainerComponent<Armor>;
-
   explicit Character(const CharacterBlueprint& bp);
 
   EntityType type() const override { return EntityType::Character; }
@@ -29,8 +26,6 @@ public:
 
   const EquipmentComponent& equipment() const { return m_equipment; }
   const ConsumableInventory& consumables() const { return m_consumables; }
-  const WeaponInventory& weapons() const { return m_weapons; }
-  const ArmorInventory& armor() const { return m_armor; }
 
   void levelUp();
   void gainExp(Experience delta);
@@ -38,14 +33,30 @@ public:
   Experience requiredExp() const;
 
   void addItem(Consumable consumable);
-  void addItem(Weapon weapon);
-  void addItem(Armor armor);
-
   void useConsumable(IdComponent consumableId);
-  bool unequipWeapon();
-  bool unequipArmor();
-  bool equipWeapon(IdComponent weaponId);
-  bool equipArmor(IdComponent armorId);
+
+  void addWeapon(Weapon weapon) { m_equipment.addWeapon(weapon); }
+  void addArmor(Armor armor) { m_equipment.addArmor(armor); }
+
+  bool unequipWeapon() {
+    if (!m_equipment.unequipWeapon()) return false;
+    return true;
+  }
+
+  bool unequipArmor() {
+    if (!m_equipment.unequipArmor()) return false;
+    return true;
+  }
+
+  bool equipWeapon(IdComponent weaponId) {
+    if (!m_equipment.equipWeapon(weaponId)) return false;
+    return true;
+  }
+
+  bool equipArmor(IdComponent armorId) {
+    if (!m_equipment.equipArmor(armorId)) return false;
+    return true;
+  }
 
 private:
   static constexpr Level kMinLevel {1};
@@ -59,8 +70,6 @@ private:
 
   EquipmentComponent m_equipment;
   ConsumableInventory m_consumables;
-  WeaponInventory m_weapons;
-  ArmorInventory m_armor;
 };
 
 } // namespace Folio

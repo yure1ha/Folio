@@ -1,6 +1,7 @@
 #pragma once
 
 #include "Folio/Components/ContainerComponent.h"
+#include "Folio/Components/Containers.h"
 #include "Folio/Components/DefenseComponent.h"
 #include "Folio/Components/HealthComponent.h"
 #include "Folio/Components/IdComponent.h"
@@ -15,16 +16,14 @@ namespace Folio {
 
 class Combatant : public Entity {
 public:
-  using ModifierList = ContainerComponent<StatusModifier>;
-
   Combatant(IdComponent id, ValueComponent exp, HealthComponent health, StrengthComponent strength,
-            DefenseComponent defense, ModifierList modifiers);
+            DefenseComponent defense, StatusModifierList modifiers);
 
   ValueComponent exp() const { return m_exp; }
   HealthComponent health() const { return m_health; }
   StrengthComponent strength() const { return m_strength; }
   DefenseComponent defense() const { return m_defense; }
-  const ModifierList& modifiers() const { return m_modifiers; }
+  const StatusModifierList& modifiers() const { return m_modifiers; }
 
   void heal(Health delta) { m_health.heal(delta); }
   void takeDamage(Health delta) { m_health.takeDamage(delta); }
@@ -35,7 +34,7 @@ public:
 
   void addStatusModifier(const StatusModifier& modifier);
   void removeStatusModifier(IdComponent modifierId);
-  void applyInstanceModifier(const InstantModifier& modifier);
+  void applyInstantModifier(const InstantModifier& modifier);
 
 private:
   template <Concepts::AttributeComponent T>
@@ -55,7 +54,7 @@ private:
   HealthComponent m_health;
   StrengthComponent m_strength;
   DefenseComponent m_defense;
-  ModifierList m_modifiers;
+  StatusModifierList m_modifiers;
 };
 
 } // namespace Folio
