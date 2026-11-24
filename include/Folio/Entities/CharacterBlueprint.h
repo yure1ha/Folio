@@ -2,13 +2,12 @@
 
 #include "Folio/Components/ContainerComponent.h"
 #include "Folio/Components/Containers.h"
+#include "Folio/Components/EquipmentComponent.h"
 #include "Folio/Core/Types.h"
 #include "Folio/Items/Armor.h"
 #include "Folio/Items/Weapon.h"
-#include "Folio/Modifiers/StatusModifier.h"
 
 #include <optional>
-#include <vector>
 
 namespace Folio {
 
@@ -27,8 +26,8 @@ struct CharacterBlueprint {
   Defense baseDefense {};
   Defense effectiveDefense {};
 
-  Weapon equippedWeapon;
-  Armor equippedArmor;
+  EquippedWeapon equippedWeapon {};
+  EquippedArmor equippedArmor {};
 
   ConsumableInventory consumables {};
   WeaponInventory weapons {};

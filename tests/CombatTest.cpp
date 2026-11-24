@@ -154,8 +154,8 @@ void runCombatTests() {
   printCombatant(antagonist);
 
   // Phase 1
-  protagonist.addItem(weapon);
-  protagonist.addItem(armor);
+  protagonist.addWeapon(weapon);
+  protagonist.addArmor(armor);
   inventorySystem.equipWeapon(weapon.id, protagonistId);
   inventorySystem.equipArmor(armor.id, protagonistId);
   printCombatant(protagonist);

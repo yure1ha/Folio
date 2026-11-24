@@ -21,7 +21,7 @@ Character::Character(const CharacterBlueprint& bp)
                  StrengthComponent {bp.baseStrength, bp.effectiveStrength},
                  DefenseComponent {bp.baseDefense, bp.effectiveDefense},
                  StatusModifierList {bp.modifiers}},
-      m_equipment {bp.equippedWeapon, bp.equippedArmor, std::move(bp.weapons), std::move(bp.armor)},
+      m_equipment {*bp.equippedWeapon, *bp.equippedArmor, std::move(bp.weapons), std::move(bp.armor)},
       m_consumables {std::move(bp.consumables)} {}
 
 void Character::levelUp() {

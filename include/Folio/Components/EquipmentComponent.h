@@ -10,11 +10,11 @@
 
 namespace Folio {
 
+using EquippedWeapon = std::optional<Weapon>;
+using EquippedArmor = std::optional<Armor>;
+
 class EquipmentComponent {
 public:
-  using EquippedWeapon = std::optional<Weapon>;
-  using EquippedArmor = std::optional<Armor>;
-
   EquipmentComponent() = default;
 
   EquipmentComponent(Weapon weapon, Armor armor, WeaponInventory weapons, ArmorInventory armors)
