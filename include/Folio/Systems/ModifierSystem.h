@@ -1,6 +1,5 @@
 #pragma once
 
-#include "Folio/Components/ContainerComponent.h"
 #include "Folio/Components/IdComponent.h"
 #include "Folio/Events/EApplyInstantModifier.h"
 #include "Folio/Events/EApplyStatusModifier.h"
@@ -14,10 +13,8 @@ namespace Folio {
 
 class ModifierSystem {
 public:
-  using ModifierList = ContainerComponent<StatusModifier>;
-
   ModifierSystem(EntityManager& entityManager,
-                 EApplyStatusModifierManager& applyStatusModifierEventManager,
+                 EApplyStatusModifierManager& applyStatusModifierManager,
                  ERemoveStatusModifierManager& removeStatusModifierManager,
                  EApplyInstantModifierManager& applyInstantModifierManager,
                  EHealthChangedManager& healthChangedManager);

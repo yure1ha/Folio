@@ -1,13 +1,13 @@
 #pragma once
 
+#include "Folio/Components/ContainerComponent.h"
+#include "Folio/Components/Containers.h"
+#include "Folio/Components/EquipmentComponent.h"
 #include "Folio/Core/Types.h"
 #include "Folio/Items/Armor.h"
-#include "Folio/Items/Consumable.h"
 #include "Folio/Items/Weapon.h"
-#include "Folio/Modifiers/StatusModifier.h"
 
 #include <optional>
-#include <vector>
 
 namespace Folio {
 
@@ -26,13 +26,13 @@ struct CharacterBlueprint {
   Defense baseDefense {};
   Defense effectiveDefense {};
 
-  std::optional<Weapon> equippedWeapon {};
-  std::optional<Armor> equippedArmor {};
+  EquippedWeapon equippedWeapon {};
+  EquippedArmor equippedArmor {};
 
-  std::vector<Consumable> consumables {};
-  std::vector<Weapon> weapons {};
-  std::vector<Armor> armor {};
-  std::vector<StatusModifier> modifiers {};
+  ConsumableInventory consumables {};
+  WeaponInventory weapons {};
+  ArmorInventory armor {};
+  StatusModifierList modifiers {};
 };
 
 } // namespace Folio

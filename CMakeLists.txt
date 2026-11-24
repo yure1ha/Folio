@@ -8,6 +8,7 @@ set(CMAKE_CXX_EXTENSIONS OFF)
 add_library(Folio
         # Components
         include/Folio/Components/ContainerComponent.h
+        include/Folio/Components/Containers.h
         include/Folio/Components/DefenseComponent.h
         include/Folio/Components/EquipmentComponent.h
         include/Folio/Components/HealthComponent.h

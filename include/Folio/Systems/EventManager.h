@@ -19,7 +19,7 @@ public:
     SystemCallback callback {};
   };
 
-  bool subscribed(SystemType systemType) {
+  bool subscribed(SystemType systemType) const {
     return std::ranges::any_of(m_subscribers, [systemType](const Subscriber& subscriber) {
       return systemType == subscriber.type;
     });

@@ -14,12 +14,12 @@
 namespace Folio {
 
 ModifierSystem::ModifierSystem(EntityManager& entityManager,
-                               EApplyStatusModifierManager& applyStatusModifierEventManager,
+                               EApplyStatusModifierManager& applyStatusModifierManager,
                                ERemoveStatusModifierManager& removeStatusModifierManager,
                                EApplyInstantModifierManager& applyInstantModifierManager,
                                EHealthChangedManager& healthChangedManager)
     : m_entityManager {entityManager},
-      m_applyStatusModifierManager {applyStatusModifierEventManager},
+      m_applyStatusModifierManager {applyStatusModifierManager},
       m_removeStatusModifierManager {removeStatusModifierManager},
       m_applyInstantModifierManager {applyInstantModifierManager},
       m_healthChangedManager {healthChangedManager} {
@@ -77,7 +77,7 @@ void ModifierSystem::onApplyInstantModifier(const EApplyInstantModifier& event) 
   auto target {m_entityManager.find<Combatant>(event.targetId)};
   if (!target) return;
 
-  target->applyInstanceModifier(event.modifier);
+  target->applyInstantModifier(event.modifier);
 
   m_healthChangedManager.dispatch(
       EHealthChanged {.sourceId = event.sourceId, .targetId = event.targetId});

@@ -16,7 +16,6 @@ struct Weapon {
   StatusModifier modifier;
 
   Strength sortKey() const { return strength.effective(); }
-
   bool hasStatusModifier() const { return modifier.type != StatusModifierType::None; }
 };
 

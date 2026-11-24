@@ -18,6 +18,6 @@ Enemy::Enemy(EnemyBlueprint bp)
                  HealthComponent {bp.baseHealth, bp.effectiveHealth, bp.currentHealth},
                  StrengthComponent {bp.baseStrength, bp.effectiveStrength},
                  DefenseComponent {bp.baseDefense, bp.effectiveDefense},
-                 ModifierList {std::move(bp.modifiers)}} {}
+                 StatusModifierList {std::move(bp.modifiers)}} {}
 
 } // namespace Folio

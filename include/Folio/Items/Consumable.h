@@ -17,9 +17,7 @@ struct Consumable {
   InstantModifier instantModifier;
 
   Stack sortKey() const { return stack.current(); }
-
   bool hasStatusModifier() const { return statusModifier.type != StatusModifierType::None; }
-
   bool hasInstantModifier() const { return instantModifier.type != InstantModifierType::None; }
 };
 

@@ -16,7 +16,6 @@ struct Armor {
   StatusModifier modifier;
 
   Defense sortKey() const { return defense.effective(); }
-
   bool hasStatusModifier() const { return modifier.type != StatusModifierType::None; }
 };
 
